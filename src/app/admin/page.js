@@ -1,10 +1,9 @@
-import StatCard from "@/components/MetricCard";
-import RegistrationTable from "@/components/RegistrationTable";
-import ChartCard from "@/components/EarningSummaryChart";
-import { Area, ResponsiveContainer } from "recharts";
+
+
 
 import EarningSummaryChart from "@/components/EarningSummaryChart";
 import MetricCard from "@/components/MetricCard";
+import NewReservationTable from "@/components/NewReservationTable";
 
 const Admin = () => {
   const months = [
@@ -64,7 +63,7 @@ const Admin = () => {
         </div>
 
         <div className="p-4">
-          <RegistrationTable />
+          {/* <NewReservationTable /> */}
         </div>
       </div>
     </>
