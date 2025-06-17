@@ -1,220 +1,220 @@
-// "use client"; // This is a client component, necessary for useState and event handlers
+"use client";
 
-// import Image from "next/image";
-// import { useState } from "react";
-// import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
+import { CheckCircle, XCircle, Eye } from "lucide-react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
-// // --- SVG Icons for Actions ---
+const reservations = [
+  {
+    id: 1,
+    table: "Table #1",
+    guestName: "Robo Gladiators",
+    partySize: 4,
+    time: "12:30 PM",
+    date: "March 15, 2024",
+    avatar: "/avatar.png", // Replace with actual avatar path
+  },
+  {
+    id: 2,
+    table: "Table #2",
+    guestName: "Robo Gladiators",
+    partySize: 2,
+    time: "11:30 PM",
+    date: "March 15, 2024",
+    avatar: "/avatar.png",
+  },
+  {
+    id: 3,
+    table: "Table #3",
+    guestName: "Robo Gladiators",
+    partySize: 1,
+    time: "10:30 PM",
+    date: "March 15, 2024",
+    avatar: "/avatar.png",
+  },
+  {
+    id: 4,
+    table: "Table #4",
+    guestName: "Robo Gladiators",
+    partySize: 4,
+    time: "8:30 PM",
+    date: "March 15, 2024",
+    avatar: "/avatar.png",
+  },
+];
 
-// // Green Checkmark Icon for Approve
-// const ApproveIcon = () => (
-//   <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-//     <circle cx="16" cy="16" r="16" fill="#16A34A" fillOpacity="0.1" />
-//     <path d="M21.3332 12.5L14.4998 19.3333L10.6665 15.5" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-//   </svg>
-// );
+export default function NewReservationTable() {
+  const [search, setSearch] = useState("");
 
-// // Red 'X' Icon for Decline
-// const DeclineIcon = () => (
-//   <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-//     <circle cx="16" cy="16" r="16" fill="#DC2626" fillOpacity="0.1" />
-//     <path d="M19.5562 12.4434L12.4434 19.5562" stroke="#DC2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-//     <path d="M12.4434 12.4434L19.5562 19.5562" stroke="#DC2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-//   </svg>
-// );
+  const filtered = reservations.filter((r) =>
+    r.guestName.toLowerCase().includes(search.toLowerCase())
+  );
 
-// // Purple Eye Icon for View
-// const ViewIcon = () => (
-//   <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-//     <circle cx="16" cy="16" r="16" fill="#9333EA" fillOpacity="0.1" />
-//     <path d="M16.0002 11.3333C18.3335 11.3333 20.6668 12.8 22.1668 15.5C20.6668 18.2 18.3335 19.6667 16.0002 19.6667C13.6668 19.6667 11.3335 18.2 9.8335 15.5C11.3335 12.8 13.6668 11.3333 16.0002 11.3333Z" stroke="#9333EA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-//     <path d="M16 17.5C17.3807 17.5 18.5 16.3807 18.5 15C18.5 13.6193 17.3807 12.5 16 12.5C14.6193 12.5 13.5 13.6193 13.5 15C13.5 16.3807 14.6193 17.5 16 17.5Z" stroke="#9333EA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-//   </svg>
-// );
+  return (
+    <div className="bg-[#3F3F3F] text-white p-4 rounded-md">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-semibold">New Reservation</h2>
+        {/* Search Input and Button Group */}
+        <div className="flex items-center ">
+          <div className="relative ">
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search"
+              className="pl-10 pr-4 py-2 bg-[#F3FAFA1A] rounded-tl-[7.04px] rounded-bl-[7.04px] border-[1px] border-[#0000001A]   text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+            />
+          </div>
 
+          <button className=" hover:bg-gray-700 transition-colors bg-[#2A2A2A] p-[5px]">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="25"
+              viewBox="0 0 24 25"
+              fill="none"
+            >
+              <path
+                d="M11 8.5L20 8.5"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M4 16.5L14 16.5"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <ellipse
+                cx="7"
+                cy="8.5"
+                rx="3"
+                ry="3"
+                transform="rotate(90 7 8.5)"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <ellipse
+                cx="17"
+                cy="16.5"
+                rx="3"
+                ry="3"
+                transform="rotate(90 17 16.5)"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-// // --- Dummy Data reflecting the screenshot ---
-// const dummyReservations = [
-//   {
-//     id: 1,
-//     guestName: "Robo Gladiators",
-//     avatarUrl: "https://via.placeholder.com/32/FF5733/FFFFFF?text=RG", // Using a public placeholder
-//     partySize: 4,
-//     table: "Table #4",
-//     time: "7:30 PM",
-//     date: "March 15, 2024",
-//   },
-//   {
-//     id: 2,
-//     guestName: "Robo Gladiators",
-//     avatarUrl: "https://via.placeholder.com/32/33FF57/FFFFFF?text=RG",
-//     partySize: 2,
-//     table: "Table #4",
-//     time: "7:30 PM",
-//     date: "March 15, 2024",
-//   },
-//   {
-//     id: 3,
-//     guestName: "Robo Gladiators",
-//     avatarUrl: "https://via.placeholder.com/32/3357FF/FFFFFF?text=RG",
-//     partySize: 1,
-//     table: "Table #4",
-//     time: "7:30 PM",
-//     date: "March 15, 2024",
-//   },
-//   {
-//     id: 4,
-//     guestName: "Robo Gladiators",
-//     avatarUrl: "https://via.placeholder.com/32/FFFF33/000000?text=RG",
-//     partySize: 4,
-//     table: "Table #4",
-//     time: "7:30 PM",
-//     date: "March 15, 2024",
-//   },
-// ];
-
-
-// export default function NewReservationTable() {
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [reservations, setReservations] = useState(dummyReservations);
-
-//   // Function to handle search input changes
-//   const handleSearchChange = (e) => {
-//     const term = e.target.value.toLowerCase();
-//     setSearchTerm(term);
-
-//     const filtered = dummyReservations.filter(
-//       (reservation) =>
-//         reservation.guestName.toLowerCase().includes(term) ||
-//         reservation.table.toLowerCase().includes(term) ||
-//         reservation.date.toLowerCase().includes(term) ||
-//         reservation.time.toLowerCase().includes(term)
-//     );
-//     setReservations(filtered);
-//   };
-
-//   // --- Action Handlers ---
-//   const handleApprove = (reservationId) => {
-//     alert(`Approving reservation ID: ${reservationId}`);
-//     // Add your approval logic here (e.g., API call, state update)
-//   };
-
-//   const handleDecline = (reservationId) => {
-//     if (confirm(`Are you sure you want to decline reservation ID: ${reservationId}?`)) {
-//         alert(`Declining reservation ID: ${reservationId}`);
-//         // Remove the item from the list for this demo
-//         setReservations(prev => prev.filter(r => r.id !== reservationId));
-//     }
-//   };
-
-//   const handleView = (reservationId) => {
-//     alert(`Viewing details for reservation ID: ${reservationId}`);
-//     // Implement navigation or modal display logic here
-//   };
-  
-//   const handleFilterClick = () => {
-//     alert("Filter button clicked! Implement your filter logic here.");
-//   };
-
-//   return (
-//     <div className="bg-[#2A2E33] p-6 rounded-xl shadow-lg bg-white/10">
-//       <div className="flex justify-between items-center mb-4">
-//         <h2 className="text-xl font-semibold text-white">
-//           New Reservation
-//         </h2>
-
-//         {/* Search Input Field and Filter Button */}
-//         <div className="flex items-center">
-//           <div className="relative">
-//             <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-//             <input
-//               type="text"
-//               placeholder="Search"
-//               className="pl-10 pr-4 py-2 bg-[#3A3F44] text-white rounded-md border border-gray-600 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500"
-//               value={searchTerm}
-//               onChange={handleSearchChange}
-//             />
-//           </div>
-//           <button
-//             onClick={handleFilterClick}
-//             className="ml-2 p-2 bg-[#3A3F44] hover:bg-gray-700 rounded-md transition-colors"
-//           >
-//             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-//               <line x1="4" y1="21" x2="4" y2="14"></line>
-//               <line x1="4" y1="10" x2="4" y2="3"></line>
-//               <line x1="12" y1="21" x2="12" y2="12"></line>
-//               <line x1="12" y1="8" x2="12" y2="3"></line>
-//               <line x1="20" y1="21" x2="20" y2="16"></line>
-//               <line x1="20" y1="12" x2="20" y2="3"></line>
-//               <line x1="1" y1="14" x2="7" y2="14"></line>
-//               <line x1="9" y1="8" x2="15" y2="8"></line>
-//               <line x1="17" y1="16" x2="23" y2="16"></line>
-//             </svg>
-//           </button>
-//         </div>
-//       </div>
-      
-//       {/* Table */}
-//       <div className="overflow-x-auto">
-//         <table className="w-full text-left text-sm">
-//           <thead>
-//             <tr className="text-white bg-[#1E293B] border-b border-gray-700">
-//               {/* Added text-center to relevant headers */}
-//               <th className="p-4 font-semibold text-center">Table</th> 
-//               <th className="p-4 font-semibold">Guest Name</th>
-//               <th className="p-4 font-semibold text-center">Party Size</th>
-//               <th className="p-4 font-semibold">Table</th> {/* Duplicate header - consider removing or clarifying */}
-//               <th className="p-4 font-semibold">Time</th>
-//               <th className="p-4 font-semibold">Date</th>
-//               <th className="p-4 font-semibold text-center">Action</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {reservations.length > 0 ? (
-//               reservations.map((row) => (
-//                 <tr key={row.id} className="border-b border-gray-700 text-gray-300">
-//                   {/* Added text-center to relevant table data cells */}
-//                   <td className="p-4 text-center">{row.table}</td>
-//                   <td className="p-4 flex items-center gap-3">
-//                     <Image
-//                       src={row.avatarUrl}
-//                       alt="Guest Avatar"
-//                       width={32}
-//                       height={32}
-//                       className="rounded-full"
-//                       onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/32'; }} // Fallback for broken image links
-//                     />
-//                     {row.guestName}
-//                   </td>
-//                   <td className="p-4 text-center">{row.partySize}</td>
-//                   <td className="p-4">{row.table}</td>
-//                   <td className="p-4">{row.time}</td>
-//                   <td className="p-4 text-center">{row.date}</td>
-//                   <td className="p-4">
-//                     <div className="flex items-center justify-center gap-2"> {/* Centered actions */}
-//                       <button onClick={() => handleApprove(row.id)} className="cursor-pointer">
-//                         <ApproveIcon />
-//                       </button>
-//                       <button onClick={() => handleDecline(row.id)} className="cursor-pointer">
-//                         <DeclineIcon />
-//                       </button>
-//                       <button onClick={() => handleView(row.id)} className="cursor-pointer">
-//                         <ViewIcon />
-//                       </button>
-//                     </div>
-//                   </td>
-//                 </tr>
-//               ))
-//             ) : (
-//               <tr>
-//                 <td colSpan="7" className="text-center py-6 text-gray-400">
-//                   No reservations found.
-//                 </td>
-//               </tr>
-//             )}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// }
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-sm">
+          <thead>
+            <tr className="bg-[#00C1C980] text-white text-center">
+              {" "}
+              {/* Added text-center here */}
+              <th className="px-4 py-2">Table</th>
+              <th className="px-4 py-2">Guest Name</th>
+              <th className="px-4 py-2">Party Size</th>
+              <th className="px-4 py-2">Time</th>
+              <th className="px-4 py-2">Date</th>
+              <th className="px-4 py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((res) => (
+              <tr
+                key={res.id}
+                className="border-b-[0.49px] border-b-[rgba(208,208,208,0.8)] h"
+              >
+                <td className="px-4 py-2 align-middle text-center">
+                  {res.table}
+                </td>{" "}
+                {/* Added text-center */}
+                <td className="px-4 py-2 flex items-center gap-2 justify-center align-middle">
+                  <img
+                    src={res.avatar}
+                    alt={res.guestName}
+                    className="w-6 h-6 rounded-full object-cover"
+                  />
+                  {res.guestName}
+                </td>
+                <td className="px-4 py-2 align-middle text-center">
+                  {res.partySize}
+                </td>{" "}
+                {/* Added text-center */} {/* Added text-center */}
+                <td className="px-4 py-2 align-middle text-center">
+                  {res.time}
+                </td>{" "}
+                {/* Added text-center */}
+                <td className="px-4 py-2 align-middle text-center">
+                  {res.date}
+                </td>{" "}
+                {/* Added text-center */}
+                <td className="px-4 py-2 flex items-center gap-[10px] justify-center align-middle">
+                  <button className="bg-[#4BB54B1A] border border-[#4BB54B] rounded-[51px] p-[5px] flex justify-center items-center shrink-0 hover:text-green-600">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 12 9"
+                      fill="none"
+                    >
+                      <path
+                        d="M1.3335 6.01782C1.3335 6.01782 2.3335 6.01782 3.66683 8.35116C3.66683 8.35116 7.37271 2.24004 10.6668 1.01782"
+                        stroke="#4BB54B"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <button className="text-red-500 hover:text-red-700 border border-[#FF0000] rounded-[51px] p-[5px] ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 12 11"
+                      fill="none"
+                    >
+                      <path
+                        d="M10.6668 0.684326L1.3335 10.0177M1.3335 0.684326L10.6668 10.0177"
+                        stroke="#FF0000"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <button className="text-purple-400 border border-[#C267FF] hover:text-purple-600 rounded-[51px] p-[5px]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 11"
+                      fill="none"
+                    >
+                      <path
+                        d="M14.3628 4.63424C14.5655 4.91845 14.6668 5.06056 14.6668 5.27091C14.6668 5.48127 14.5655 5.62338 14.3628 5.90759C13.4521 7.18462 11.1263 9.93758 8.00016 9.93758C4.87402 9.93758 2.54823 7.18462 1.63752 5.90759C1.43484 5.62338 1.3335 5.48127 1.3335 5.27091C1.3335 5.06056 1.43484 4.91845 1.63752 4.63424C2.54823 3.35721 4.87402 0.604248 8.00016 0.604248C11.1263 0.604248 13.4521 3.35721 14.3628 4.63424Z"
+                        stroke="#C267FF"
+                      />
+                      <path
+                        d="M10 5.271C10 4.16643 9.10457 3.271 8 3.271C6.89543 3.271 6 4.16643 6 5.271C6 6.37557 6.89543 7.271 8 7.271C9.10457 7.271 10 6.37557 10 5.271Z"
+                        stroke="#C267FF"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

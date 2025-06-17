@@ -1,6 +1,3 @@
-
-
-
 import EarningSummaryChart from "@/components/EarningSummaryChart";
 import MetricCard from "@/components/MetricCard";
 import NewReservationTable from "@/components/NewReservationTable";
@@ -42,7 +39,7 @@ const Admin = () => {
             timePeriodData={months}
           />
 
-            <MetricCard
+          <MetricCard
             title="New Registrations"
             value={200}
             percentageChange={4}
@@ -54,16 +51,13 @@ const Admin = () => {
         <div className=" p-4">
           {/* Earning Summary Chart */}
           <div className=" w-full">
-      
             {/* Ensure minimum height for chart visibility */}
             <EarningSummaryChart />
           </div>
-
-         
         </div>
 
         <div className="p-4">
-          {/* <NewReservationTable /> */}
+          <NewReservationTable />
         </div>
       </div>
     </>
