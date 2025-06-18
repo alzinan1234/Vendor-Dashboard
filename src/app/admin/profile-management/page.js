@@ -1,13 +1,13 @@
-import PromotionSetupPage from '@/components/PromotionSetup/PromotionSetupPage'
-import AddPromotion from '@/components/PromotionSetup/PromotionSetupPage'
-import React from 'react'
+import ProfileManagement from "@/components/ProfileManagement/ProfileManagement";
+
+import React from "react";
 
 const PromotionSetup = () => {
   return (
     <div>
-<PromotionSetupPage/>
+      <ProfileManagement />
     </div>
-  )
-}
+  );
+};
 
-export default PromotionSetup
+export default PromotionSetup;

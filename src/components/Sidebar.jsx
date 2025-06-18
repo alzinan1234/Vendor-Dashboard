@@ -71,7 +71,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   }`}
                 >
                   <Icon className="w-5 h-5 mr-3" />
-                  <span className="font-normal text-[13px]">{name}</span>
+                  <span className="font-normal text-[12px]">{name}</span>
                 </Link>
               );
             })}
