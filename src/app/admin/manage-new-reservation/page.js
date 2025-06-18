@@ -1,13 +1,13 @@
 
 "use client"
-import ManageRegistration from '@/components/ManageRegistration/ManageRegistration'
+
+import ManageNewReservation from '@/components/ManageNewReservation/ManageNewReservation'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-
-      <ManageRegistration/>
+      <ManageNewReservation/>
     </div>
   )
 }

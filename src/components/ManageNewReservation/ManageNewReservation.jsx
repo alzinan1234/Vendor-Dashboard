@@ -13,7 +13,7 @@ const reservations = [
     partySize: 4,
     time: "12:30 PM",
     date: "March 15, 2024",
-    avatar: "/avatar.png", // Replace with actual avatar path
+    avatar: "/image/userImage.png", // Replace with actual avatar path
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ const reservations = [
     partySize: 2,
     time: "11:30 PM",
     date: "March 15, 2024",
-    avatar: "/avatar.png",
+    avatar: "/image/userImage.png",
   },
   {
     id: 3,
@@ -31,7 +31,7 @@ const reservations = [
     partySize: 1,
     time: "10:30 PM",
     date: "March 15, 2024",
-    avatar: "/avatar.png",
+    avatar: "/image/userImage.png",
   },
   {
     id: 4,
@@ -40,11 +40,11 @@ const reservations = [
     partySize: 4,
     time: "8:30 PM",
     date: "March 15, 2024",
-    avatar: "/avatar.png",
+    avatar: "/image/userImage.png",
   },
 ];
 
-export default function NewReservationTable() {
+export default function ManageNewReservation() {
   const [search, setSearch] = useState("");
 
   const filtered = reservations.filter((r) =>

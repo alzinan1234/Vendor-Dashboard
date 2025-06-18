@@ -1,13 +1,14 @@
-import UserManagements from '@/components/UserManagement/UserManagements'
+import Orders from '@/components/Orders/Orders'
+
 import React from 'react'
 
-const UserManagement = () => {
+const OrdersManagements = () => {
   return (
     <div>
 
-        <UserManagements/>
+     <Orders />
     </div>
   )
 }
 
-export default UserManagement
+export default OrdersManagements
