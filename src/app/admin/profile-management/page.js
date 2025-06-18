@@ -1,8 +1,9 @@
+"use client";
 import ProfileManagement from "@/components/ProfileManagement/ProfileManagement";
 
 import React from "react";
 
-const PromotionSetup = () => {
+const ProfileManagements = () => {
   return (
     <div>
       <ProfileManagement />
@@ -10,4 +11,4 @@ const PromotionSetup = () => {
   );
 };
 
-export default PromotionSetup;
+export default ProfileManagements;
