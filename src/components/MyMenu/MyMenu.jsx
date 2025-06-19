@@ -6,8 +6,8 @@ import Image from 'next/image';
 import EditItem from './EditItem';
 
 // MyMenu Component
-const MyMenu = ({ onBackClick }) => {
-  const [menuItems] = useState([ // Using useState for initial data, but filtering will be done on this
+const MyMenu = ({ onBackClick , onAddClick }) => {
+  const [menuItems, setMenuItems] = useState([ // Using useState for initial data, but filtering will be done on this
     {
       id: 1,
       image: '/bannerImage/tacos.jpg',
@@ -249,7 +249,7 @@ const MyMenu = ({ onBackClick }) => {
       available: true,
     },
   ]);
- const [currentPage, setCurrentPage] = useState(1);
+const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All'); // New state for category filter
   const itemsPerPage = 25; // As per the screenshot, there are 25 items on the first page
@@ -291,7 +291,6 @@ const MyMenu = ({ onBackClick }) => {
   const handleBackFromEditItem = () => {
     setEditingItem(null); // Close the EditItem component
   };
-
 
   // Function to render pagination numbers with ellipses
   const renderPageNumbers = () => {
@@ -340,9 +339,10 @@ const MyMenu = ({ onBackClick }) => {
       </button>
     ));
   };
-  return (
+
+return (
     <>
-       {editingItem ? (
+      {editingItem ? (
         <EditItem item={editingItem} onSave={handleSaveItem} onBackClick={handleBackFromEditItem} />
       ) : (
         <div className="min-h-screen bg-[#343434] text-white p-8 font-sans rounded-lg">
@@ -364,7 +364,10 @@ const MyMenu = ({ onBackClick }) => {
                 <h1 className="text-2xl font-semibold">My Menu</h1>
               </div>
               <div className="flex items-center space-x-4">
-                <button className="flex items-center bg-[#4A4A4A] rounded-full px-4 py-2 text-sm font-medium hover:bg-[#5A5A5A]">
+                <button
+                  className="flex items-center bg-[#4A4A4A] rounded-full px-4 py-2 text-sm font-medium hover:bg-[#5A5A5A]"
+                  onClick={onAddClick} // Call onAddClick prop when "Add Item" is clicked
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5 mr-2"
@@ -530,7 +533,6 @@ const MyMenu = ({ onBackClick }) => {
 
         </div>
       )}
-
     </>
   );
 };
