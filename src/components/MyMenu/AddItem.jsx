@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'; // Import for the search icon
+import React, { useState, useRef, useEffect } from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"; // Import for the search icon
 
 // AddItem Component
 const AddItem = ({ onBackClick, onAddItem }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    category: 'Starter', // Default category
-    price: '',
-    discountPercentage: '',
+    name: "",
+    description: "",
+    category: "Starter", // Default category
+    price: "",
+    discountPercentage: "",
     image: null, // To store the URL of the uploaded image
   });
 
@@ -36,16 +36,21 @@ const AddItem = ({ onBackClick, onAddItem }) => {
         ...prevData,
         image: imageUrl,
       }));
-      console.log('File selected:', file.name);
+      console.log("File selected:", file.name);
     }
   };
 
   const handleDone = () => {
     // Basic validation
-    if (!formData.name || !formData.description || !formData.price || !formData.image) {
+    if (
+      !formData.name ||
+      !formData.description ||
+      !formData.price ||
+      !formData.image
+    ) {
       // Using a simple alert for now, as per original code context, but recommend a custom modal UI.
       // Do NOT use browser's alert() in production.
-      alert('Please fill in all required fields and upload an image.');
+      alert("Please fill in all required fields and upload an image.");
       return;
     }
     // Generate a unique ID for the new item
@@ -59,7 +64,10 @@ const AddItem = ({ onBackClick, onAddItem }) => {
       <div className="w-full max-w-2xl bg-[#343434] rounded-lg">
         {/* Header with back button and Add Category */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={onBackClick} className="mr-4 p-2 rounded-full hover:bg-gray-700">
+          <button
+            onClick={onBackClick}
+            className="mr-4 p-2 rounded-full hover:bg-gray-700"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 text-white"
@@ -67,7 +75,12 @@ const AddItem = ({ onBackClick, onAddItem }) => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
             </svg>
           </button>
           <h1 className="text-2xl font-semibold">Add Item</h1>
@@ -79,7 +92,12 @@ const AddItem = ({ onBackClick, onAddItem }) => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
             </svg>
             Add Category
           </button>
@@ -89,13 +107,19 @@ const AddItem = ({ onBackClick, onAddItem }) => {
         <div className="space-y-6">
           {/* Upload Image Section */}
           <div>
-            <label className="block text-gray-300 text-sm font-medium mb-2">Upload Image</label>
+            <label className="block text-gray-300 text-sm font-medium mb-2">
+              Upload Image
+            </label>
             <div
               className="rounded-lg h-32 cursor-pointer relative overflow-hidden flex items-center justify-center border border-dashed border-[#CACACA]"
               onClick={handleImageUploadClick}
             >
               {formData.image ? (
-                <img src={formData.image} alt="Item Preview" className="w-full h-full object-cover rounded-lg" />
+                <img
+                  src={formData.image}
+                  alt="Item Preview"
+                  className="w-full h-full object-cover rounded-lg"
+                />
               ) : (
                 <div className="flex flex-col items-center justify-center">
                   <svg
@@ -127,7 +151,10 @@ const AddItem = ({ onBackClick, onAddItem }) => {
 
           {/* Item Name */}
           <div>
-            <label htmlFor="name" className="block text-gray-300 text-sm font-medium mb-2">
+            <label
+              htmlFor="name"
+              className="block text-gray-300 text-sm font-medium mb-2"
+            >
               Item Name
             </label>
             <input
@@ -142,7 +169,10 @@ const AddItem = ({ onBackClick, onAddItem }) => {
 
           {/* Item Details (Description) */}
           <div>
-            <label htmlFor="description" className="block text-gray-300 text-sm font-medium mb-2">
+            <label
+              htmlFor="description"
+              className="block text-gray-300 text-sm font-medium mb-2"
+            >
               Item Details
             </label>
             <textarea
@@ -157,7 +187,10 @@ const AddItem = ({ onBackClick, onAddItem }) => {
 
           {/* Category */}
           <div>
-            <label htmlFor="category" className="block text-gray-300 text-sm font-medium mb-2">
+            <label
+              htmlFor="category"
+              className="block text-gray-300 text-sm font-medium mb-2"
+            >
               Category
             </label>
             <div className="relative">
@@ -186,7 +219,10 @@ const AddItem = ({ onBackClick, onAddItem }) => {
 
           {/* Item Price */}
           <div>
-            <label htmlFor="price" className="block text-gray-300 text-sm font-medium mb-2">
+            <label
+              htmlFor="price"
+              className="block text-gray-300 text-sm font-medium mb-2"
+            >
               Item Price
             </label>
             <input
@@ -201,7 +237,10 @@ const AddItem = ({ onBackClick, onAddItem }) => {
 
           {/* Discount Percentage */}
           <div>
-            <label htmlFor="discountPercentage" className="block text-gray-300 text-sm font-medium mb-2">
+            <label
+              htmlFor="discountPercentage"
+              className="block text-gray-300 text-sm font-medium mb-2"
+            >
               Discount Percentage
             </label>
             <input
@@ -229,3 +268,5 @@ const AddItem = ({ onBackClick, onAddItem }) => {
     </div>
   );
 };
+
+export default AddItem;

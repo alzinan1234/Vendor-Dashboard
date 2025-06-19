@@ -45,7 +45,6 @@ const dummyMonthlyData = Array.from({ length: 75 }).map((_, i) => ({
   userImagePath: "/image/user-photo.png",
 }));
 
-
 const itemsPerPage = 10;
 
 export default function EarningsTable() {
@@ -68,11 +67,11 @@ export default function EarningsTable() {
     setCurrentPage(1); // Reset to first page when data changes
   }, [selected]);
 
-
-  const filteredData = data.filter((item) =>
-    item.user.toLowerCase().includes(search.toLowerCase()) ||
-    item.serial.toLowerCase().includes(search.toLowerCase()) ||
-    item.subscription.toLowerCase().includes(search.toLowerCase())
+  const filteredData = data.filter(
+    (item) =>
+      item.user.toLowerCase().includes(search.toLowerCase()) ||
+      item.serial.toLowerCase().includes(search.toLowerCase()) ||
+      item.subscription.toLowerCase().includes(search.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -109,9 +108,7 @@ export default function EarningsTable() {
             {/* search icon */}
             <div className="flex items-center ">
               <div className="relative">
-                <MagnifyingGlassIcon
-                  className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
-                />
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search"
@@ -170,7 +167,11 @@ export default function EarningsTable() {
         {/* Weekly/Monthly Revenue and Dropdown */}
         <div className="relative text-white flex flex-col justify-center items-center mb-6">
           <div className="mb-2 text-sm">
-            {selected} Revenue <span className="font-bold">${selected === "Weekly" ? "12,322" : "35,000"}</span> {/* Dynamic revenue */}
+            {selected} Revenue{" "}
+            <span className="font-bold">
+              ${selected === "Weekly" ? "12,322" : "35,000"}
+            </span>{" "}
+            {/* Dynamic revenue */}
           </div>
 
           <button
@@ -178,12 +179,19 @@ export default function EarningsTable() {
             className="flex items-center gap-[8.31px] w-[73px] mb-5 h-[27px] pl-[6.65px] rounded-[18.28px] bg-white/10"
           >
             <span className="text-xs">{selected}</span>
-            <ChevronDown size={16} className={`transform transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+            <ChevronDown
+              size={16}
+              className={`transform transition-transform duration-300 ${
+                open ? "rotate-180" : ""
+              }`}
+            />
           </button>
 
           <div
             className={`absolute top-full mt-1 w-[100px] rounded bg-white/20 backdrop-blur text-xs shadow-md z-10 transform transition-all duration-300 origin-top ${
-              open ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0 pointer-events-none"
+              open
+                ? "scale-y-100 opacity-100"
+                : "scale-y-0 opacity-0 pointer-events-none"
             }`}
           >
             {options.map((option) => (
@@ -200,7 +208,6 @@ export default function EarningsTable() {
             ))}
           </div>
         </div>
-
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -261,9 +268,21 @@ export default function EarningsTable() {
           disabled={currentPage === 1}
           className="w-8 h-8 flex items-center border rounded-full justify-center p-[10px] hover:bg-[#1f1f1f] disabled:opacity-50 disabled:cursor-not-allowed"
         >
-        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14" fill="none">
-  <path d="M6.99995 13C6.99995 13 1.00001 8.58107 0.999999 6.99995C0.999986 5.41884 7 1 7 1" stroke="#E2E2E2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="8"
+            height="14"
+            viewBox="0 0 8 14"
+            fill="none"
+          >
+            <path
+              d="M6.99995 13C6.99995 13 1.00001 8.58107 0.999999 6.99995C0.999986 5.41884 7 1 7 1"
+              stroke="#E2E2E2"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </button>
         {Array.from({ length: totalPages }).map((_, index) => {
           const pageNumber = index + 1;
@@ -303,9 +322,21 @@ export default function EarningsTable() {
           disabled={currentPage === totalPages}
           className="w-8 h-8 flex items-center border rounded-full  justify-center  hover:bg-[#1f1f1f] disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14" fill="none">
-  <path d="M1.00005 1C1.00005 1 6.99999 5.41893 7 7.00005C7.00001 8.58116 1 13 1 13" stroke="#C8C8C8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="8"
+            height="14"
+            viewBox="0 0 8 14"
+            fill="none"
+          >
+            <path
+              d="M1.00005 1C1.00005 1 6.99999 5.41893 7 7.00005C7.00001 8.58116 1 13 1 13"
+              stroke="#C8C8C8"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </button>
       </div>
 
