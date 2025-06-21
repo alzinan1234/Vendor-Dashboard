@@ -1,20 +1,21 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"; // Import for the search icon
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import AddCategory from "./AddCategory";
 
-// AddItem Component
 const AddItem = ({ onBackClick, onAddItem }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    category: "Starter", // Default category
+    category: "Starter",
     price: "",
     discountPercentage: "",
-    image: null, // To store the URL of the uploaded image
+    image: null,
   });
 
   const fileInputRef = useRef(null);
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -41,28 +42,36 @@ const AddItem = ({ onBackClick, onAddItem }) => {
   };
 
   const handleDone = () => {
-    // Basic validation
     if (
       !formData.name ||
       !formData.description ||
       !formData.price ||
       !formData.image
     ) {
-      // Using a simple alert for now, as per original code context, but recommend a custom modal UI.
-      // Do NOT use browser's alert() in production.
       alert("Please fill in all required fields and upload an image.");
       return;
     }
-    // Generate a unique ID for the new item
     const newItem = { ...formData, id: Date.now() };
-    onAddItem(newItem); // Pass the new item data to the parent
-    onBackClick(); // Go back to My Menu view
+    onAddItem(newItem);
+    onBackClick();
+  };
+
+  const handleAddCategoryClick = () => {
+    setIsAddCategoryOpen(true);
+  };
+
+  const handleCategoryAdded = (newCategory) => {
+    setIsAddCategoryOpen(false);
+    // Update the category dropdown options here if needed
+    setFormData((prevData) => ({
+      ...prevData,
+      category: newCategory.name, // Optionally set the new category as default
+    }));
   };
 
   return (
-    <div className="min-h-screen bg-[#343434] text-white p-8 font-sans rounded-lg flex flex-col items-center">
+    <div className="min-h-screen bg-[#343434] text-white p-8 font-sans rounded-lg flex flex-col items-center relative">
       <div className="w-full max-w-2xl bg-[#343434] rounded-lg">
-        {/* Header with back button and Add Category */}
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={onBackClick}
@@ -84,7 +93,10 @@ const AddItem = ({ onBackClick, onAddItem }) => {
             </svg>
           </button>
           <h1 className="text-2xl font-semibold">Add Item</h1>
-          <button className="ml-auto flex items-center bg-[#4A4A4A] rounded-full px-4 py-2 text-sm font-medium hover:bg-[#5A5A5A]">
+          <button
+            onClick={handleAddCategoryClick}
+            className="ml-auto flex items-center bg-[#4A4A4A] rounded-full px-4 py-2 text-sm font-medium hover:bg-[#5A5A5A]"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 mr-2"
@@ -103,9 +115,7 @@ const AddItem = ({ onBackClick, onAddItem }) => {
           </button>
         </div>
 
-        {/* Form Fields */}
         <div className="space-y-6">
-          {/* Upload Image Section */}
           <div>
             <label className="block text-gray-300 text-sm font-medium mb-2">
               Upload Image
@@ -133,7 +143,7 @@ const AddItem = ({ onBackClick, onAddItem }) => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M12 4v16m8-8H4" // Plus icon
+                      d="M12 4v16m8-8H4"
                     />
                   </svg>
                   <span className="text-gray-400 text-sm">Upload</span>
@@ -149,7 +159,6 @@ const AddItem = ({ onBackClick, onAddItem }) => {
             </div>
           </div>
 
-          {/* Item Name */}
           <div>
             <label
               htmlFor="name"
@@ -167,7 +176,6 @@ const AddItem = ({ onBackClick, onAddItem }) => {
             />
           </div>
 
-          {/* Item Details (Description) */}
           <div>
             <label
               htmlFor="description"
@@ -185,7 +193,6 @@ const AddItem = ({ onBackClick, onAddItem }) => {
             ></textarea>
           </div>
 
-          {/* Category */}
           <div>
             <label
               htmlFor="category"
@@ -217,7 +224,6 @@ const AddItem = ({ onBackClick, onAddItem }) => {
             </div>
           </div>
 
-          {/* Item Price */}
           <div>
             <label
               htmlFor="price"
@@ -235,7 +241,6 @@ const AddItem = ({ onBackClick, onAddItem }) => {
             />
           </div>
 
-          {/* Discount Percentage */}
           <div>
             <label
               htmlFor="discountPercentage"
@@ -253,7 +258,6 @@ const AddItem = ({ onBackClick, onAddItem }) => {
             />
           </div>
 
-          {/* Done Button */}
           <div className="col-span-full mt-4">
             <button
               onClick={handleDone}
@@ -265,6 +269,15 @@ const AddItem = ({ onBackClick, onAddItem }) => {
           </div>
         </div>
       </div>
+
+      {isAddCategoryOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <AddCategory
+            onBackClick={() => setIsAddCategoryOpen(false)}
+            onAddCategory={handleCategoryAdded}
+          />
+        </div>
+      )}
     </div>
   );
 };
