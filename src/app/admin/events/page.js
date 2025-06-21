@@ -1,17 +1,17 @@
 
+import Events from '@/components/Events/Events'
 import TrainerManagement from '@/components/TrainerManagement/TrainerManagement'
 import React from 'react'
 
-const TrainerManagements = () => {
+const EventsPage = () => {
   return (
     <div>
       <>
-
-      <TrainerManagement />
+             <Events/>
       </>
       
     </div>
   )
 }
 
-export default TrainerManagements
+export default EventsPage
