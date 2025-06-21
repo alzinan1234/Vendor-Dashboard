@@ -1,11 +1,12 @@
 "use client";
-import BannerManagement from '@/components/BannerManagement/BannerManagement.'
+
+import EventRegistrationManagement from '@/components/EventRegistrationManagement/EventRegistrationManagement';
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-    <BannerManagement />
+    <EventRegistrationManagement />
     </div>
   )
 }
