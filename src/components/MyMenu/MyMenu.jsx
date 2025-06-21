@@ -577,7 +577,7 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
             <button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`w-8 h-8 flex items-center justify-center rounded-full border ${
+              className={`w-8 h-8 flex items-center justify-center rounded border ${
                 currentPage === 1
                   ? "cursor-not-allowed border-gray-700 text-gray-700"
                   : "hover:bg-[#2d2d2d] text-gray-400"
@@ -605,7 +605,7 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
             <button
               onClick={() => paginate(currentPage + 1)}
               disabled={currentPage === totalPages || totalPages === 0}
-              className={`w-8 h-8 flex items-center rounded-full border justify-center ${
+              className={`w-8 h-8 flex items-center rounded border justify-center ${
                 currentPage === totalPages || totalPages === 0
                   ? "cursor-not-allowed border-gray-700 text-gray-700"
                   : "hover:bg-[#2d2d2d] text-gray-400"
