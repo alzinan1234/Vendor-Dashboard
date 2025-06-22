@@ -19,6 +19,7 @@
     "@tabler/icons-react": "^3.34.0",
     "chart.js": "^4.4.9",
     "classnames": "^2.5.1",
+    "firebase": "^11.9.1",
     "framer-motion": "^12.15.0",
     "jodit": "^4.6.2",
     "jodit-react": "^5.2.19",

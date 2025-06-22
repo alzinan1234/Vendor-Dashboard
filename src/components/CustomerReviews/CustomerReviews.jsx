@@ -143,9 +143,8 @@ export default function CustomerReviews() {
 
   return (
    <>
-  
     <div className="min-h-screen bg-[#343434] rounded-lg  text-gray-100 p-4 font-sans flex flex-col items-center">
-      <div className="w-full   overflow-hidden">
+      <div className="w-full overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4  rounded-t-lg">
           <h1 className="text-xl font-semibold text-white">Customer Reviews</h1>
@@ -156,11 +155,10 @@ export default function CustomerReviews() {
                   type="text"
                   placeholder="Search"
                   className="pl-10 pr-4 py-2 bg-[#F3FAFA1A] rounded-tl-[7.04px] rounded-bl-[7.04px] border-[1px] border-[#0000001A] text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-            value={searchTerm}
-              onChange={handleSearchChange}
+                  value={searchTerm}
+                  onChange={handleSearchChange}
                 />
               </div>
-
               <button className="hover:bg-gray-700 transition-colors bg-[#2A2A2A] p-[5px] rounded-tr-[7.04px] rounded-br-[7.04px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -224,7 +222,6 @@ export default function CustomerReviews() {
                         {review.comment}
                       </div>
                     </div>
-                    
                     <div className="w-full h-0 border-t  border-[#3061a1] border-[0.58px] my-1" />
                     <div className="w-full flex flex-row justify-between items-center">
                       <div className="flex flex-wrap items-center gap-[6.4px] content-center">
@@ -258,82 +255,81 @@ export default function CustomerReviews() {
             </div>
           )}
         </div>
-
-        
       </div>
     </div>
 
     {/* Pagination */}
-        <div className="flex items-center justify-end p-4  rounded-b-lg">
+    <div className="flex items-center justify-end p-4  rounded-b-lg">
+      <button
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="p-2 mx-1 rounded-full bg-gray-600 hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-gray-200"
+        >
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+        <button
+          key={pageNumber}
+          onClick={() => handlePageChange(pageNumber)}
+          className={`px-4 py-2 mx-1 rounded text-sm font-medium ${
+            pageNumber === currentPage
+              ? 'bg-[#00C1C9] text-white'
+              : 'text-gray-200 hover:bg-gray-500'
+          } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+        >
+          {pageNumber}
+        </button>
+      ))}
+      <button
+        onClick={() => handlePageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="p-2 mx-1 rounded bg-gray-600 hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-gray-200"
+        >
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+      {totalPages > 5 && (
+        <>
+          {currentPage < totalPages - 2 && <span className="mx-1 text-gray-300">....</span>}
           <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="p-2 mx-1 rounded-full bg-gray-600 hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={() => handlePageChange(totalPages)}
+            className={`px-4 py-2 mx-1 rounded text-sm font-medium ${
+              totalPages === currentPage
+                ? 'bg-[#00C1C9] text-white'
+                : 'bg-gray-600 text-gray-200 hover:bg-gray-500'
+            } focus:outline-none focus:ring-2 focus:ring-blue-500`}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-gray-200"
-            >
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
+            {totalPages}
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-            <button
-              key={pageNumber}
-              onClick={() => handlePageChange(pageNumber)}
-              className={`px-4 py-2 mx-1 rounded text-sm font-medium ${
-                pageNumber === currentPage
-                  ? 'bg-[#00C1C9] text-white'
-                  : ' text-gray-200 hover:bg-gray-500'
-              } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            >
-              {pageNumber}
-            </button>
-          ))}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="p-2 mx-1 rounded bg-gray-600 hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-gray-200"
-            >
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
-          {totalPages > 5 && ( // Show "..." and last page if more than 5 pages
-            <>
-              {currentPage < totalPages - 2 && <span className="mx-1 text-gray-300">....</span>}
-              <button
-                onClick={() => handlePageChange(totalPages)}
-                className={`px-4 py-2 mx-1 rounded text-sm font-medium ${
-                  totalPages === currentPage
-                    ? 'bg-[#00C1C9] text-white'
-                    : 'bg-gray-600 text-gray-200 hover:bg-gray-500'
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              >
-                {totalPages}
-              </button>
-            </>
-          )}
-        </div>
+        </>
+      )}
+    </div>
    </>
   );
 }
+   
