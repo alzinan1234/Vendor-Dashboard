@@ -1,4 +1,3 @@
-
 "use client";
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
@@ -189,50 +188,50 @@ export default function EventRegistrationManagement() {
                   <th
                     key={header}
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
+                    className="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider text-center"
                   >
                     {header}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className=" divide-y divide-gray-700">
+            <tbody className="divide-y divide-gray-700">
               {currentRegistrations.length > 0 ? (
                 currentRegistrations.map((reg) => (
                   <tr key={reg.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{reg.eventName}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{reg.eventName}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          reg.paymentStatus === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                          reg.paymentStatus === 'Paid' ? ' text-[#71F50C]' : ' text-red-600'
                         }`}
                       >
                         {reg.paymentStatus}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{reg.attendeeName}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{reg.emailPhone}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{reg.guests}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{reg.registeredOn}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{reg.attendeeName}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{reg.emailPhone}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{reg.guests}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{reg.registeredOn}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                           reg.status === 'Confirmed'
-                            ? 'bg-green-100 text-green-800'
+                            ? ' text-[#71F50C]'
                             : reg.status === 'Pending'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
+                            ? ' text-[#FB6000]'
+                            : ' text-red-700'
                         }`}
                       >
                         {reg.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-6 flex items-center justify-center py-4 whitespace-nowrap text-sm font-medium text-center">
                       {reg.status === 'Pending' ? (
                         <>
                           <button
                             onClick={() => handleConfirm(reg.id)}
-                            className="text-green-400 hover:text-green-600 mx-1 p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="text-green-400 hover:text-green-600 border mx-1 p-1 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
                             title="Confirm"
                           >
                             <svg
@@ -251,7 +250,7 @@ export default function EventRegistrationManagement() {
                           </button>
                           <button
                             onClick={() => handleReject(reg.id)}
-                            className="text-red-400 hover:text-red-600 mx-1 p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                            className="text-[#FF0000] border border-[#FF0000] hover:text-red-600 mx-1 p-1 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
                             title="Reject"
                           >
                             <svg
@@ -274,7 +273,7 @@ export default function EventRegistrationManagement() {
                         <>
                           <button
                             onClick={() => handleView(reg.id)}
-                            className="text-purple-400 hover:text-purple-600 mx-1 p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="text-purple-400 border hover:text-purple-600 mx-1 p-1 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
                             title="View"
                           >
                             <svg
@@ -300,7 +299,7 @@ export default function EventRegistrationManagement() {
                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11" fill="none">
   <path d="M10.6663 0.943359L1.33301 10.2767M1.33301 0.943359L10.6663 10.2767" stroke="#FF0000" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
-                          </button>
+                          </button>     
                         </>
                       )}
                     </td>
@@ -383,7 +382,7 @@ export default function EventRegistrationManagement() {
                 className={`px-4 py-2 mx-1 rounded-full text-sm font-medium ${
                   totalPages === currentPage
                     ? 'bg-[#00C1C9] text-white'
-                    : 'bg-gray-600 text-gray-200 hover:bg-gray-500'
+                    : 'bg-gray-600 text-gray-200 hover:bg-gray-500' 
                 } focus:outline-none focus:ring-2 focus:ring-blue-500`}
               >
                 {totalPages}
@@ -394,3 +393,4 @@ export default function EventRegistrationManagement() {
    </>
   );
 }
+
