@@ -1,4 +1,5 @@
 "use client";
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 // Import necessary libraries and components
 import React, { useState } from 'react';
 
@@ -141,51 +142,68 @@ export default function CustomerReviews() {
   };
 
   return (
+   <>
+  
     <div className="min-h-screen bg-[#343434] rounded-lg  text-gray-100 p-4 font-sans flex flex-col items-center">
       <div className="w-full   overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4  rounded-t-lg">
           <h1 className="text-xl font-semibold text-white">Customer Reviews</h1>
-          <div className="relative flex items-center">
-            <input
-              type="text"
-              placeholder="Search"
-              className="pl-8 pr-3 py-2 rounded-full  text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-48"
-              value={searchTerm}
+          <div className="flex items-center ">
+              <div className="relative">
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="pl-10 pr-4 py-2 bg-[#F3FAFA1A] rounded-tl-[7.04px] rounded-bl-[7.04px] border-[1px] border-[#0000001A] text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+            value={searchTerm}
               onChange={handleSearchChange}
-            />
-            <svg
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <button className="ml-3 p-2 bg-gray-600 rounded-full hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-gray-200"
-              >
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-              </svg>
-            </button>
-          </div>
+                />
+              </div>
+
+              <button className="hover:bg-gray-700 transition-colors bg-[#2A2A2A] p-[5px] rounded-tr-[7.04px] rounded-br-[7.04px]">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="25"
+                  viewBox="0 0 24 25"
+                  fill="none"
+                >
+                  <path
+                    d="M11 8.5L20 8.5"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M4 16.5L14 16.5"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <ellipse
+                    cx="7"
+                    cy="8.5"
+                    rx="3"
+                    ry="3"
+                    transform="rotate(90 7 8.5)"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <ellipse
+                    cx="17"
+                    cy="16.5"
+                    rx="3"
+                    ry="3"
+                    transform="rotate(90 17 16.5)"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
         </div>
 
         {/* Reviews Grid */}
@@ -206,7 +224,8 @@ export default function CustomerReviews() {
                         {review.comment}
                       </div>
                     </div>
-                    <div className="w-full h-0 border-t border-[#CCCCCC] border-[0.58px] my-1" />
+                    
+                    <div className="w-full h-0 border-t  border-[#3061a1] border-[0.58px] my-1" />
                     <div className="w-full flex flex-row justify-between items-center">
                       <div className="flex flex-wrap items-center gap-[6.4px] content-center">
                         <img
@@ -240,8 +259,12 @@ export default function CustomerReviews() {
           )}
         </div>
 
-        {/* Pagination */}
-        <div className="flex items-center justify-center p-4  rounded-b-lg">
+        
+      </div>
+    </div>
+
+    {/* Pagination */}
+        <div className="flex items-center justify-end p-4  rounded-b-lg">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
@@ -266,10 +289,10 @@ export default function CustomerReviews() {
             <button
               key={pageNumber}
               onClick={() => handlePageChange(pageNumber)}
-              className={`px-4 py-2 mx-1 rounded-full text-sm font-medium ${
+              className={`px-4 py-2 mx-1 rounded text-sm font-medium ${
                 pageNumber === currentPage
                   ? 'bg-[#00C1C9] text-white'
-                  : 'bg-gray-600 text-gray-200 hover:bg-gray-500'
+                  : ' text-gray-200 hover:bg-gray-500'
               } focus:outline-none focus:ring-2 focus:ring-blue-500`}
             >
               {pageNumber}
@@ -278,7 +301,7 @@ export default function CustomerReviews() {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="p-2 mx-1 rounded-full bg-gray-600 hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-2 mx-1 rounded bg-gray-600 hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -311,7 +334,6 @@ export default function CustomerReviews() {
             </>
           )}
         </div>
-      </div>
-    </div>
+   </>
   );
 }
