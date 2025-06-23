@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react'; // Import useState
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -18,15 +18,15 @@ import {
 import Image from 'next/image';
 import dreckks from '../../public/dreckks-logo.png';
 import barss from '../../public/icon/bars.png';
-import { orderedList } from 'jodit/esm/plugins/ordered-list/ordered-list';
+// The 'jodit' import below seems unused and can be safely removed if not used elsewhere
+// import { orderedList } from 'jodit/esm/plugins/ordered-list/ordered-list';
 
 const navItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Manage New Reservation', href: '/admin/manage-new-reservation', icon: FileText },
-    { name: 'Orders', href: '/admin/orders', icon: BookText },
+  { name: 'Orders', href: '/admin/orders', icon: BookText },
   { name: 'Earning', href: '/admin/earning', icon: Wallet },
   { name: 'Massage', href: '/admin/massage', icon: MessageCircleMore },
-
   { name: 'Profile Management', href: '/admin/profile-management', icon: UserPen },
   { name: 'My Menu', href: '/admin/my-menu', icon: PanelTopOpen },
   { name: 'Events', href: '/admin/events', icon: CalendarDays },
@@ -34,17 +34,18 @@ const navItems = [
   { name: 'Banner Management', href: '/admin/banner-management', icon: ImageIcon },
   { name: 'Promotion Setup', href: '/admin/promotion-setup', icon: Megaphone },
   { name: 'Customer Reviews', href: '/admin/customer-reviews', icon: StarIcon },
-  { name: 'Withdraws', href: '/admin/withdraws', icon: BanknoteArrowDown   },
-  
-  
+  { name: 'Withdraws', href: '/admin/withdraws', icon: BanknoteArrowDown },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
-
-
-
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const pathname = usePathname();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // State to manage settings dropdown
+
+  const handleSettingsClick = (e) => {
+    e.preventDefault(); // Prevent default link behavior
+    setIsSettingsOpen(!isSettingsOpen);
+  };
 
   return (
     <>
@@ -63,14 +64,75 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </div>
 
           {/* Navigation Items */}
-          <nav className="mt-4 space-y-6 flex-grow overflow-y-auto hide-scrollbar"> {/* Added hide-scrollbar class */}
+          <nav className="mt-4 space-y-6 flex-grow overflow-y-auto hide-scrollbar">
             {navItems.map(({ name, href, icon: Icon }) => {
               const isActive = pathname === href;
+
+              if (name === 'Settings') {
+                return (
+                  <div key={name}>
+                    <a
+                      href="#" // Using href="#" for a clickable but non-navigating link
+                      onClick={handleSettingsClick}
+                      className={`flex items-center px-4 w-[218px] mx-auto py-2 transition-all rounded ${
+                        (isActive || pathname.startsWith('/admin/settings/')) // Check if current path starts with settings
+                          ? 'bg-[#00C1C9] text-white shadow-[1.5px_1.5px_0_0_#71F50C]'
+                          : 'hover:bg-zinc-800'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5 mr-3" />
+                      <span className="font-normal text-[12px]">{name}</span>
+                      {/* Dropdown arrow icon */}
+                      <svg
+                        className={`w-4 h-4 ml-auto transition-transform duration-300 ${isSettingsOpen ? 'rotate-90' : ''}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </a>
+                    {/* Dropdown content with smooth transition */}
+                    <div
+                      className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                        isSettingsOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                    >
+                      <div className="ml-8 mt-2 space-y-2"> {/* Indent dropdown items */}
+                        <Link
+                          href="/admin/settings/edit-profile"
+                          className={`flex items-center px-4 w-[180px] py-2 transition-all rounded ${
+                            pathname === '/admin/settings/edit-profile'
+                              ? 'bg-[#00C1C9] text-white shadow-[1.5px_1.5px_0_0_#71F50C]'
+                              : 'hover:bg-zinc-800 text-gray-300'
+                          }`}
+                        >
+                          <UserPen className="w-4 h-4 mr-3" /> {/* Example icon for Edit Profile */}
+                          <span className="font-normal text-[12px]">Edit Profile</span>
+                        </Link>
+                        <Link
+                          href="/admin/settings/bank-details"
+                          className={`flex items-center px-4 w-[180px] py-2 transition-all rounded ${
+                            pathname === '/admin/settings/bank-details'
+                              ? 'bg-[#00C1C9] text-white shadow-[1.5px_1.5px_0_0_#71F50C]'
+                              : 'hover:bg-zinc-800 text-gray-300'
+                          }`}
+                        >
+                          <CreditCard className="w-4 h-4 mr-3" /> {/* Example icon for Bank Details */}
+                          <span className="font-normal text-[12px]">Bank Details</span>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <Link
                   key={name}
                   href={href}
-                  className={`flex items-center px-4 w-[218px]   mx-auto py-2 transition-all rounded ${
+                  className={`flex items-center px-4 w-[218px] mx-auto py-2 transition-all rounded ${
                     isActive
                       ? 'bg-[#00C1C9] text-white shadow-[1.5px_1.5px_0_0_#71F50C]'
                       : 'hover:bg-zinc-800'
@@ -82,22 +144,18 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               );
             })}
 
-              {/* Logout Button */}
+            {/* Logout Button */}
             <div className="border-t border-[#D6D6D6] pt-6 ">
               <button className="flex ml-9 gap-2 items-center text-[#FF0000] hover:text-red-600">
-               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-   <path d="M12.7 18.5583H12.5916C8.89164 18.5583 7.10831 17.1 6.79997 13.8333C6.76664 13.4917 7.01664 13.1833 7.36664 13.15C7.69997 13.1166 8.01664 13.375 8.04997 13.7167C8.29164 16.3333 9.52497 17.3083 12.6 17.3083H12.7083C16.1 17.3083 17.3 16.1083 17.3 12.7167V7.28332C17.3 3.89165 16.1 2.69165 12.7083 2.69165H12.6C9.50831 2.69165 8.27497 3.68332 8.04997 6.34998C8.00831 6.69165 7.71664 6.94998 7.36664 6.91665C7.01664 6.89165 6.76664 6.58332 6.79164 6.24165C7.07497 2.92498 8.86664 1.44165 12.5916 1.44165H12.7C16.7916 1.44165 18.5416 3.19165 18.5416 7.28332V12.7167C18.5416 16.8083 16.7916 18.5583 12.7 18.5583Z" fill="#FF0000"/>
-   <path d="M3.01672 9.875H12.5001C12.5302 9.87502 12.5614 9.88746 12.587 9.91309C12.6127 9.93872 12.6251 9.96987 12.6251 10C12.6251 10.0301 12.6127 10.0613 12.587 10.0869C12.5614 10.1125 12.5302 10.125 12.5001 10.125H3.01672C2.98658 10.125 2.95545 10.1126 2.92981 10.0869C2.90417 10.0613 2.89172 10.0301 2.89172 10C2.89172 9.96985 2.90417 9.93873 2.92981 9.91309C2.95545 9.88744 2.98658 9.875 3.01672 9.875Z" fill="#FF0000" stroke="#FF0000"/>
-   <path d="M4.92432 7.09521L4.96338 7.12061C4.98473 7.14212 4.99756 7.17281 4.99756 7.2085C4.99754 7.22619 4.99465 7.24262 4.98877 7.25732L4.96338 7.29639L2.61279 9.646L2.25928 10.0005L2.61279 10.354L4.96338 12.7036C4.98479 12.7251 4.99751 12.7558 4.99756 12.7915C4.99756 12.8272 4.98471 12.8579 4.96338 12.8794L4.95752 12.8862L4.95166 12.8921C4.94839 12.8956 4.94108 12.9022 4.92725 12.9077C4.91276 12.9135 4.89424 12.9164 4.87549 12.9165C4.85781 12.9165 4.84194 12.9131 4.82861 12.9077L4.78662 12.8794L1.99561 10.0884C1.97417 10.0669 1.96056 10.0361 1.96045 10.0005C1.96045 9.98253 1.96418 9.96556 1.97021 9.95068L1.99561 9.91162L4.78662 7.12061C4.80815 7.09908 4.83964 7.08545 4.87549 7.08545C4.89325 7.0855 4.90958 7.08925 4.92432 7.09521Z" fill="#FF0000" stroke="#FF0000"/>
-</svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M12.7 18.5583H12.5916C8.89164 18.5583 7.10831 17.1 6.79997 13.8333C6.76664 13.4917 7.01664 13.1833 7.36664 13.15C7.69997 13.1166 8.01664 13.375 8.04997 13.7167C8.29164 16.3333 9.52497 17.3083 12.6 17.3083H12.7083C16.1 17.3083 17.3 16.1083 17.3 12.7167V7.28332C17.3 3.89165 16.1 2.69165 12.7083 2.69165H12.6C9.50831 2.69165 8.27497 3.68332 8.04997 6.34998C8.00831 6.69165 7.71664 6.94998 7.36664 6.91665C7.01664 6.89165 6.76664 6.58332 6.79164 6.24165C7.07497 2.92498 8.86664 1.44165 12.5916 1.44165H12.7C16.7916 1.44165 18.5416 3.19165 18.5416 7.28332V12.7167C18.5416 16.8083 16.7916 18.5583 12.7 18.5583Z" fill="#FF0000"/>
+                  <path d="M3.01672 9.875H12.5001C12.5302 9.87502 12.5614 9.88746 12.587 9.91309C12.6127 9.93872 12.6251 9.96987 12.6251 10C12.6251 10.0301 12.6127 10.0613 12.587 10.0869C12.5614 10.1125 12.5302 10.125 12.5001 10.125H3.01672C2.98658 10.125 2.95545 10.1126 2.92981 10.0869C2.90417 10.0613 2.89172 10.0301 2.89172 10C2.89172 9.96985 2.90417 9.93873 2.92981 9.91309C2.95545 9.88744 2.98658 9.875 3.01672 9.875Z" fill="#FF0000" stroke="#FF0000"/>
+                  <path d="M4.92432 7.09521L4.96338 7.12061C4.98473 7.14212 4.99756 7.17281 4.99756 7.2085C4.99754 7.22619 4.99465 7.24262 4.98877 7.25732L4.96338 7.29639L2.61279 9.646L2.25928 10.0005L2.61279 10.354L4.96338 12.7036C4.98479 12.7251 4.99751 12.7558 4.99756 12.7915C4.99756 12.8272 4.98471 12.8579 4.96338 12.8794L4.95752 12.8862L4.95166 12.8921C4.94839 12.8956 4.94108 12.9022 4.92725 12.9077C4.91276 12.9135 4.89424 12.9164 4.87549 12.9165C4.85781 12.9165 4.84194 12.9131 4.82861 12.9077L4.78662 12.8794L1.99561 10.0884C1.97417 10.0669 1.96056 10.0361 1.96045 10.0005C1.96045 9.98253 1.96418 9.96556 1.97021 9.95068L1.99561 9.91162L4.78662 7.12061C4.80815 7.09908 4.83964 7.08545 4.87549 7.08545C4.89325 7.0855 4.90958 7.08925 4.92432 7.09521Z" fill="#FF0000" stroke="#FF0000"/>
+                </svg>
                 Logout
               </button>
             </div>
-
-
-            </nav>
-
-          
+          </nav>
         </div>
       </aside>
 

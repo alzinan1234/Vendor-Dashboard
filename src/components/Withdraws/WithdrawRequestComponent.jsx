@@ -50,7 +50,7 @@ const WithdrawRequestComponent = ({ onBack }) => {
           <div className="relative">
             <button
               type="button"
-              className="w-full border border-gray-600 rounded-lg py-3 px-4 bg-[#232323] text-left text-white focus:outline-none focus:border-teal-500 flex justify-between items-center"
+              className="w-full border border-gray-600 rounded-lg py-3 px-4  text-left text-white focus:outline-none focus:border-teal-500 flex justify-between items-center"
               onClick={() => setShowDropdown((prev) => !prev)}
             >
               {region ? region : 'Your Region'}
@@ -98,7 +98,7 @@ const WithdrawRequestComponent = ({ onBack }) => {
               type="submit"
               className="w-full mx-auto flex justify-center items-center rounded-full bg-[#00C1C9] text-white py-2 font-medium border-b-4 border-lime-400"
             >
-              Done
+              Submit
             </button>
           </div>
       </form>
