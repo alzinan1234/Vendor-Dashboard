@@ -41,7 +41,7 @@ const navItems = [
   },
   { name: "Orders", href: "/vendor/orders", icon: BookText },
   { name: "Earning", href: "/vendor/earning", icon: Wallet },
-  { name: "Massage", href: "/vendor/massage", icon: MessageCircleMore },
+  { name: "Message", href: "/vendor/message", icon: MessageCircleMore },
   {
     name: "Profile Management",
     href: "/vendor/profile-management",
