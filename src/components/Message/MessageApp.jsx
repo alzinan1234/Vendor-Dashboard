@@ -9,8 +9,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
+import EmojiPicker from "emoji-picker-react";
 
 const MessageApp = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -202,8 +201,8 @@ const MessageApp = () => {
   };
 
   // Handles emoji selection from the picker
-  const handleEmojiSelect = (emoji) => {
-    setMessageInput((prevInput) => prevInput + emoji.native);
+  const handleEmojiSelect = (emojiData) => {
+    setMessageInput((prevInput) => prevInput + emojiData.emoji);
   };
 
   // Toggles the visibility of the emoji picker
@@ -440,15 +439,12 @@ const MessageApp = () => {
                     {/* Emoji Picker Popover */}
                     {showEmojiPicker && (
                       <div className="absolute bottom-14 right-0 z-20">
-                        <Picker
-                          data={data}
-                          onEmojiSelect={handleEmojiSelect}
-                          theme="dark" // Matches your dark theme
-                          perLine={8} // More emojis per line for better view
-                          previewPosition="none" // Hides the preview row to save space
-                          skinTonePosition="none" // Hides skin tone selector
-                          set="native" // Use native emojis
-                          categories={['people', 'nature', 'foods', 'activity', 'travel', 'objects', 'symbols', 'flags']} // Specify categories
+                        <EmojiPicker
+                          onEmojiClick={handleEmojiSelect}
+                          theme="dark"
+                          searchDisabled={false}
+                          width={300}
+                          height={350}
                         />
                       </div>
                     )}
