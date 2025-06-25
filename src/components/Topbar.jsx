@@ -8,7 +8,7 @@ export default function Topbar({ onBellClick }) {
   const router = useRouter(); // Initialize useRouter
 
   const handleUserImageClick = () => {
-    router.push('/admin/profile'); // Navigate to the profile page
+    router.push('/vendor/profile'); // Navigate to the profile page
   };
 
   return (
