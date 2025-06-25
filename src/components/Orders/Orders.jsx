@@ -15,7 +15,7 @@ const Orders = () => {
 
   // Handler to navigate to the order details page
   const handleViewDetails = (orderId) => {
-    router.push(`/admin/orders/${orderId}`);
+    router.push(`/vendor/orders/${orderId}`);
   };
   
   // Filter orders based on search term

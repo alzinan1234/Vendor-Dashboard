@@ -24,7 +24,7 @@ const OrderDetailsPage = ({ params }) => {
 
   // Handler for the close button to go back to the list
   const handleClose = () => {
-    router.push('/admin/orders'); // Or use router.back()
+    router.push('/vendor/orders'); // Or use router.back()
   };
 
   // Loading or not found state
