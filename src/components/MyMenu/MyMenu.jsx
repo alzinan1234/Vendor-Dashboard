@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-// import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"; // Import for the search icon
 import Image from "next/image";
 import EditItem from "./EditItem";
 import AddItem from "./AddItem";
@@ -10,7 +9,6 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 // MyMenu Component
 const MyMenu = ({ onBackClick, onAddClick }) => {
   const [menuItems, setMenuItems] = useState([
-    // Using useState for initial data, but filtering will be done on this
     {
       id: 1,
       image: "/bannerImage/tacos.jpg",
@@ -254,11 +252,11 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
   ]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All"); // New state for category filter
-  const itemsPerPage = 25; // As per the screenshot, there are 25 items on the first page
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const itemsPerPage = 25;
 
-  const [editingItem, setEditingItem] = useState(null); // State to hold the item being edited
-  const [showAddItem, setShowAddItem] = useState(false); // State to show AddItem
+  const [editingItem, setEditingItem] = useState(null);
+  const [showAddItem, setShowAddItem] = useState(false);
 
   // Filter menu items based on search term and selected category
   const filteredItems = menuItems.filter((item) => {
@@ -304,9 +302,16 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
   // Function to handle adding a new item from AddItem
   const handleAddItem = (newItem) => {
     setMenuItems((prevItems) => [
-      { ...newItem, available: true },
+      { ...newItem, available: true, id: prevItems.length + 1 }, // Assign a new ID
       ...prevItems,
     ]);
+  };
+
+  // Function to clear all filters
+  const handleClearFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("All");
+    setCurrentPage(1);
   };
 
   // Function to render pagination numbers with ellipses
@@ -395,25 +400,7 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
-                <button
-                  onClick={onBackClick}
-                  className="mr-4 p-2 rounded-full hover:bg-gray-700"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                    />
-                  </svg>
-                </button>
+           
                 <h1 className="text-2xl font-semibold">My Menu</h1>
               </div>
               <div className="flex items-center space-x-4">
@@ -504,6 +491,15 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
                     </svg>
                   </button>
                 </div>
+                {/* Clear Filters Button */}
+                {(searchTerm !== "" || selectedCategory !== "All") && (
+                  <button
+                    onClick={handleClearFilters}
+                    className="flex items-center bg-red-600 rounded-full px-4 py-2 text-sm font-medium hover:bg-red-700 transition-colors"
+                  >
+                    Clear Filters
+                  </button>
+                )}
               </div>
             </div>
 

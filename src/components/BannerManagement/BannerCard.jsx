@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const BannerCard = ({ banner }) => {
   return (
-    <div className="  relative w-full max-w-sm h-[249px] rounded-[42px] overflow-hidden shadow-lg text-white">
+    <div className="  relative w-full max-w-sm md:h-[249px] rounded-[42px] overflow-hidden shadow-lg text-white">
       {/* Background Image */}
       <Image
         src={banner.imageUrl || "https://via.placeholder.com/400x200"}

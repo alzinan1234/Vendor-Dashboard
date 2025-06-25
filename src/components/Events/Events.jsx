@@ -183,10 +183,10 @@ export default function Events() {
         <h1 className="text-3xl font-bold mb-4 sm:mb-0">Events</h1>
         <div className="flex items-center space-x-2 w-full sm:w-auto">
           <button
-            className="flex items-center bg-[#4A4A4A] hover:bg-[#5A5A5A] transition-colors duration-200 text-white font-semibold py-2 px-4 rounded-lg text-sm"
+            className="flex items-center bg-[#4A4A4A] hover:bg-[#5A5A5A] transition-colors duration-200 text-white  py-2 px-4 rounded-full font-medium text-[12px]"
             onClick={() => setShowCreateForm(true)}
           >
-            <Plus size={18} className="mr-2" />
+            <Plus  size={18} className="mr-2  text-white rounded-full" />
             Create New Event
           </button>
           <div className="flex items-center">
