@@ -391,22 +391,10 @@ const MessageApp = () => {
                     onClick={handleAttachFileClick}
                     title="Attach File"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                      <polyline points="14 2 14 8 20 8"></polyline>
-                      <line x1="12" y1="17" x2="12" y2="11"></line>
-                      <line x1="9" y1="14" x2="15" y2="14"></line>
-                    </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+  <path d="M12.5 6.33984L12.5 18.2198" stroke="white" stroke-width="0.99" stroke-linecap="round"/>
+  <path d="M18.4404 12.2798L6.56043 12.2798" stroke="white" stroke-width="0.99" stroke-linecap="round"/>
+</svg>
                   </button>
                   {/* Hidden File Input */}
                   <input
