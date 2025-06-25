@@ -9,7 +9,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import EmojiPicker from "emoji-picker-react";
+import EmojiPicker from "emoji-picker-react"; // Using emoji-picker-react as per your latest code
 
 const MessageApp = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -189,8 +189,16 @@ const MessageApp = () => {
     const files = event.target.files;
     if (files.length > 0) {
       console.log("Attached file:", files[0].name, "Type:", files[0].type, "Size:", files[0].size, "bytes");
-      // Implement logic to upload or process the attached file (e.g., using FormData and fetch API)
-      // Example:
+      // To "display in message box" (meaning next to the input), you would
+      // typically manage a state variable here for selected files to show their names
+      // or a small preview. For this request, we'll confirm the file selection.
+      //
+      // Example of how you might visually confirm the attachment near the input:
+      // const [attachedFiles, setAttachedFiles] = useState([]);
+      // setAttachedFiles([...attachedFiles, files[0].name]);
+      //
+      // You can also add logic here to upload the file to a server.
+      // Example for uploading:
       // const formData = new FormData();
       // formData.append('file', files[0]);
       // fetch('/api/upload-file', { method: 'POST', body: formData })
@@ -202,6 +210,7 @@ const MessageApp = () => {
 
   // Handles emoji selection from the picker
   const handleEmojiSelect = (emojiData) => {
+    // emojiData.emoji is used for 'emoji-picker-react'
     setMessageInput((prevInput) => prevInput + emojiData.emoji);
   };
 
@@ -391,10 +400,16 @@ const MessageApp = () => {
                     onClick={handleAttachFileClick}
                     title="Attach File"
                   >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
-  <path d="M12.5 6.33984L12.5 18.2198" stroke="white" stroke-width="0.99" stroke-linecap="round"/>
-  <path d="M18.4404 12.2798L6.56043 12.2798" stroke="white" stroke-width="0.99" stroke-linecap="round"/>
-</svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="25"
+                      height="25"
+                      viewBox="0 0 25 25"
+                      fill="none"
+                    >
+                      <path d="M12.5 6.33984L12.5 18.2198" stroke="white" strokeWidth="0.99" strokeLinecap="round" />
+                      <path d="M18.4404 12.2798L6.56043 12.2798" stroke="white" strokeWidth="0.99" strokeLinecap="round" />
+                    </svg>
                   </button>
                   {/* Hidden File Input */}
                   <input
@@ -429,7 +444,7 @@ const MessageApp = () => {
                       <div className="absolute bottom-14 right-0 z-20">
                         <EmojiPicker
                           onEmojiClick={handleEmojiSelect}
-                          theme="dark"
+                          theme="dark" // Matches your dark theme
                           searchDisabled={false}
                           width={300}
                           height={350}

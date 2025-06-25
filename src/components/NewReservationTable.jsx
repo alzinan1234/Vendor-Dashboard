@@ -193,7 +193,7 @@ export default function NewReservationTable() {
                     </svg>
                   </button>
 
-                  <Link href={`/admin/manage-new-reservation/${res.id}`}>
+                  <Link href={`/vendor/manage-new-reservation/${res.id}`}>
                   <button className="text-purple-400 border border-[#C267FF] hover:text-purple-600 rounded-[51px] p-[5px]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
