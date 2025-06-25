@@ -145,7 +145,7 @@ const PromotionSetupPage = () => {
               </svg>
             </span>
             <span className="text-white font-medium text-[12px]">
-              Add New Trainer
+             Add New Promotion
             </span>
           </button>
           <div className="flex items-center ">
