@@ -139,7 +139,7 @@ export default function ManageNewReservation() {
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
-  }
+  }  
 
   return (
     <>
@@ -172,50 +172,33 @@ export default function ManageNewReservation() {
                   </svg>
                   Add Reservation
                 </button>
-                <div className="relative">
-                  <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    className="pl-10 pr-4 py-2 bg-[#F3FAFA1A] rounded-tl-[7.04px] rounded-bl-[7.04px] border-[1px] border-[#0000001A] text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    value={search}
+              <div className="flex items-center gap-4">
+                            <div className="flex items-center ">
+                              <div className="relative">
+                                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                                <input
+                                  type="text"
+                                  placeholder="Search"
+                                  className="pl-10 pr-4 py-2 bg-[#F3FAFA1A] rounded-tl-[7.04px] rounded-bl-[7.04px] border-[1px] border-[#0000001A] text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                 value={search}
                     onChange={(e) => {
                       setSearch(e.target.value);
-                      setCurrentPage(1); // Reset to first page on search
+                      setCurrentPage(1); 
                     }}
-                  />
-                </div>
-
-                <button className="hover:bg-gray-700 transition-colors bg-[#2A2A2A] p-[5px] rounded-tr-[7.04px] rounded-br-[7.04px]">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="25"
-                    viewBox="0 0 24 25"
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M11 8.5L20 8.5" />
-                    <path d="M4 16.5L14 16.5" />
-                    <ellipse
-                      cx="7"
-                      cy="8.5"
-                      rx="3"
-                      ry="3"
-                      transform="rotate(90 7 8.5)"
-                    />
-                    <ellipse
-                      cx="17"
-                      cy="16.5"
-                      rx="3"
-                      ry="3"
-                      transform="rotate(90 17 16.5)"
-                    />
-                  </svg>
-                </button>
+                                  autoComplete="off"
+                                />
+                              </div>
+                              <button className="hover:bg-gray-700 transition-colors bg-[#2A2A2A] p-[5px] rounded-tr-[7.04px] rounded-br-[7.04px]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+                                  <path d="M11 8.5L20 8.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                  <path d="M4 16.5L14 16.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                  <ellipse cx="7" cy="8.5" rx="3" ry="3" transform="rotate(90 7 8.5)" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                  <ellipse cx="17" cy="16.5" rx="3" ry="3" transform="rotate(90 17 16.5)" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                
               </div>
             </div>
             <div className="overflow-x-auto">
@@ -263,22 +246,7 @@ export default function ManageNewReservation() {
                         {res.date}
                       </td>
                       <td className="px-4 py-2 flex items-center gap-[10px] justify-center align-middle">
-                        <button className="bg-[#4BB54B1A] border border-[#4BB54B] rounded-[51px] p-[5px] flex justify-center items-center shrink-0 hover:text-green-600">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 12 9"
-                            fill="none"
-                          >
-                            <path
-                              d="M1.3335 6.01782C1.3335 6.01782 2.3335 6.01782 3.66683 8.35116C3.66683 8.35116 7.37271 2.24004 10.6668 1.01782"
-                              stroke="#4BB54B"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
+                    
                         <button className="text-red-500 hover:text-red-700 border border-[#FF0000] rounded-[51px] p-[5px] ">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

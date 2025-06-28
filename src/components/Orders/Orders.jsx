@@ -125,6 +125,23 @@ const Orders = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{order.amount}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-2 justify-center">
                       {/* MODIFIED: onClick handler to navigate to the details page */}
+
+                          <button className="bg-[#4BB54B1A] border border-[#4BB54B] rounded-[51px] p-[5px] flex justify-center items-center shrink-0 hover:text-green-600">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 12 9"
+                            fill="none"
+                          >
+                            <path
+                              d="M1.3335 6.01782C1.3335 6.01782 2.3335 6.01782 3.66683 8.35116C3.66683 8.35116 7.37271 2.24004 10.6668 1.01782"
+                              stroke="#4BB54B"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
                       <button onClick={() => handleViewDetails(order.orderId)} className="text-purple-400 border border-[#C267FF] hover:text-purple-600 rounded-[51px] p-[5px]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 11" fill="none">
                           <path d="M14.3628 4.63424C14.5655 4.91845 14.6668 5.06056 14.6668 5.27091C14.6668 5.48127 14.5655 5.62338 14.3628 5.90759C13.4521 7.18462 11.1263 9.93758 8.00016 9.93758C4.87402 9.93758 2.54823 7.18462 1.63752 5.90759C1.43484 5.62338 1.3335 5.48127 1.3335 5.27091C1.3335 5.06056 1.43484 4.91845 1.63752 4.63424C2.54823 3.35721 4.87402 0.604248 8.00016 0.604248C11.1263 0.604248 13.4521 3.35721 14.3628 4.63424Z" stroke="#C267FF" />
