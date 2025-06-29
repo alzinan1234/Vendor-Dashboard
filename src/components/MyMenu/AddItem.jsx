@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import AddCategory from "./AddCategory";
+import toast, { Toaster } from 'react-hot-toast'; // Import toast and Toaster
 
 const AddItem = ({ onBackClick, onAddItem }) => {
   const [formData, setFormData] = useState({
@@ -48,12 +49,17 @@ const AddItem = ({ onBackClick, onAddItem }) => {
       !formData.price ||
       !formData.image
     ) {
-      alert("Please fill in all required fields and upload an image.");
+      toast.error("Please fill in all required fields and upload an image."); // Use toast.error
       return;
     }
     const newItem = { ...formData, id: Date.now() };
     onAddItem(newItem);
-    onBackClick();
+    toast.success("Item added successfully!"); // Show success toast
+
+    // Add a small delay before navigating back to allow the toast to be seen
+    setTimeout(() => {
+      onBackClick();
+    }, 1000); // 1000ms (1 second) delay
   };
 
   const handleAddCategoryClick = () => {
@@ -278,6 +284,7 @@ const AddItem = ({ onBackClick, onAddItem }) => {
           />
         </div>
       )}
+      <Toaster /> {/* Add Toaster component here */}
     </div>
   );
 };
