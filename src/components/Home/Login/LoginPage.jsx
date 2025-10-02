@@ -3,6 +3,8 @@
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Eye, EyeOff } from "lucide-react"; // Importing icons from lucide-react
+import { authService, tokenManager } from "@/lib/authService";
+ // Import our auth service
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -10,7 +12,7 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // New state for password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -40,46 +42,41 @@ export default function LoginPage() {
       return;
     }
 
-    // --- Simulate API Call (Replace with your actual backend call) ---
-    console.log("Attempting to log in with:", { email, password, rememberMe });
-
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate network delay
+      console.log("Attempting to log in with:", { email, password, rememberMe });
 
-      let success = false;
-      let redirectPath = "/";
-      let token = ""; // To store the token for setting in cookie
+      // Call the API through our auth service
+      const result = await authService.login({
+        email: email,
+        password: password
+      });
 
-      // --- Simulated Admin Login ---
-      if (email === "vendor@example.com" && password === "vendor123") {
-        console.log("Vendor Login successful!");
-        toast.success("Vendor Login Successful! (Simulated)");
-        token = "VENDOR_TOKEN_SECRET"; // Set vendor token
-        redirectPath = "/vendor"; // Redirect vendor to /vendor
-        success = true;
-      }
-      // --- Simulated Regular User Login ---
-      else if (email === "user@example.com" && password === "password123") {
-        console.log("User Login successful!");
-        toast.success("User Login Successful! (Simulated)");
-        token = "USER_TOKEN_SECRET"; // Set regular user token
-        redirectPath = "/vendor"; // Redirect regular user to /vendor as per prompt
-        success = true;
-      }
-      // --- Simulated Failed Login ---
-      else {
-        const errorMessage = "Invalid email or password. (Simulated)";
+      if (result.success) {
+        // console.log("Login successful!", result.data);
+        // console.log("Login successful zzzzz!", result?.data?.data?.access);
+        toast.success("Login Successful!");
+        
+        // Store the token
+        tokenManager.setToken(result?.data?.data?.access, rememberMe);
+        
+        // Determine redirect path based on user role/type
+        let redirectPath = "/vendor"; // Default redirect
+        
+        // You can customize redirect logic based on API response
+        if (result.user && result.user.role === 'admin') {
+          redirectPath = "/admin";
+        } else if (result.user && result.user.role === 'vendor') {
+          redirectPath = "/vendor";
+        }
+        // Add more role-based redirections as needed
+
+        // Redirect using window.location.href
+        window.location.href = redirectPath;
+      } else {
+        // Handle API error
+        const errorMessage = result.error || "Login failed. Please try again.";
         setError(errorMessage);
         toast.error(errorMessage);
-      }
-
-      if (success) {
-        // Set the token in a cookie. Max age is 30 days if rememberMe is checked, otherwise 30 minutes.
-        document.cookie = `token=${token}; path=/; max-age=${
-          rememberMe ? 60 * 60 * 24 * 30 : 60 * 30
-        }; SameSite=Lax`;
-        // Use window.location.href for redirection as useRouter from next/navigation is not available
-        window.location.href = redirectPath;
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -120,7 +117,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-6">
           <div>
             <label
               htmlFor="email"
@@ -199,6 +196,7 @@ export default function LoginPage() {
 
           <button
             type="submit"
+            onClick={handleSubmit}
             style={{
               width: "112px",
               height: "40px",
@@ -217,7 +215,7 @@ export default function LoginPage() {
           >
             {loading ? "Signing In..." : "Sign In"}
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );
