@@ -1,22 +1,63 @@
-// components/AddReservationForm.jsx
+"use client";
 
-import React from "react";
+import { reservationService } from "@/lib/reservationService";
+import { venueService } from "@/lib/venueService";
+import React, { useState, useEffect } from "react";
 
-export default function AddReservationForm({ onClose }) {
-  const handleSubmit = (e) => {
+
+export default function AddReservationForm({ onClose, onSuccess }) {
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    guestName: "",
+    partySize: "",
+    bookingTime: "",
+    bookingDate: "",
+    specialRequests: ""
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here, e.g., send data to an API
-    console.log("Reservation form submitted!");
-    onClose(); // Close the form after submission
+    setLoading(true);
+
+    try {
+      // Get venue ID
+      const venueId = await venueService.getMyVenueId();
+
+      const result = await reservationService.createReservation({
+        guestName: formData.guestName,
+        partySize: formData.partySize,
+        bookingTime: formData.bookingTime,
+        bookingDate: formData.bookingDate,
+        hospitalityVenue: venueId,
+        specialRequests: formData.specialRequests
+      });
+
+      if (result.success) {
+        alert('Reservation created successfully!');
+        onSuccess(); // Refresh parent list
+        onClose();
+      } else {
+        alert(result.error);
+      }
+    } catch (error) {
+      alert('Failed to create reservation: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    // This div will be the only content displayed in the main section when the form is open
     <div className="bg-[#3F3F3F] md:h-[714px] p-6 rounded-lg shadow-lg w-full text-white mt-4">
-      {/* Added mt-4 for spacing from top */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Add Reservation</h2>
-        <button onClick={onClose} className="text-white  hover:text-white">
+        <button onClick={onClose} className="text-white hover:text-gray-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
@@ -36,112 +77,90 @@ export default function AddReservationForm({ onClose }) {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label
-            htmlFor="guestName"
-            className="block text-sm font-medium text-gray-300 mb-1"
-          >
-            Guest Name
+          <label htmlFor="guestName" className="block text-sm font-medium text-gray-300 mb-1">
+            Guest Name *
           </label>
           <input
             type="text"
             id="guestName"
-            className="w-full px-3 py-2 border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-            placeholder="Robo Gladiators"
-            defaultValue="Robo Gladiators"
+            name="guestName"
+            value={formData.guestName}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
+            placeholder="Enter guest name"
           />
         </div>
 
         <div>
-          <label
-            htmlFor="phoneNumber"
-            className="block text-sm font-medium text-gray-300 mb-1"
-          >
-            Phone number
-          </label>
-          <input
-            type="text"
-            id="phoneNumber"
-            className="w-full px-3 py-2 border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-            placeholder="(319) 555-0115"
-            defaultValue="(319) 555-0115"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-300 mb-1"
-          >
-            Email (if)
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="w-full px-3 py-2 border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-            placeholder="abc@example.com"
-            defaultValue="abc@example.com"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="partySize"
-            className="block text-sm font-medium text-gray-300 mb-1"
-          >
-            Party Size
+          <label htmlFor="partySize" className="block text-sm font-medium text-gray-300 mb-1">
+            Party Size *
           </label>
           <input
             type="number"
             id="partySize"
-            className="w-full px-3 py-2 border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-            placeholder="4"
-            defaultValue="4"
+            name="partySize"
+            value={formData.partySize}
+            onChange={handleChange}
+            required
+            min="1"
+            className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
+            placeholder="Enter party size"
           />
         </div>
 
         <div>
-          <label
-            htmlFor="time"
-            className="block text-sm font-medium text-gray-300 mb-1"
-          >
-            Time
-          </label>
-          <select
-            id="time"
-            className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none"
-            defaultValue="7:30 PM"
-          >
-            <option value="7:30 PM">7:30 PM</option>
-            <option value="8:00 PM">8:00 PM</option>
-            <option value="8:30 PM">8:30 PM</option>
-          </select>
-        </div>
-
-        <div>
-          <label
-            htmlFor="date"
-            className="block text-sm font-medium text-gray-300 mb-1"
-          >
-            Date
+          <label htmlFor="bookingTime" className="block text-sm font-medium text-gray-300 mb-1">
+            Time *
           </label>
           <input
-            type="text"
-            id="date"
-            className="w-full px-3 py-2 border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-            placeholder="March 15, 2024"
-            defaultValue="March 15, 2024"
+            type="time"
+            id="bookingTime"
+            name="bookingTime"
+            value={formData.bookingTime}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
           />
         </div>
 
-        <div className="col-span-full bottom-0 mt-[100px]">
-          <button
-            type="submit"
-            className="w-full mx-auto flex justify-center items-center rounded-full bg-[#00C1C9] text-white py-2 font-medium border-b-4 border-lime-400"
-          >
-            Add Reservation
-          </button>
+        <div>
+          <label htmlFor="bookingDate" className="block text-sm font-medium text-gray-300 mb-1">
+            Date *
+          </label>
+          <input
+            type="date"
+            id="bookingDate"
+            name="bookingDate"
+            value={formData.bookingDate}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
+          />
         </div>
-      </form>
+
+        <div>
+          <label htmlFor="specialRequests" className="block text-sm font-medium text-gray-300 mb-1">
+            Special Requests
+          </label>
+          <textarea
+            id="specialRequests"
+            name="specialRequests"
+            value={formData.specialRequests}
+            onChange={handleChange}
+            rows="3"
+            className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500text-white"
+placeholder="Any special requests..."
+/>
+</div><div className="col-span-full bottom-0 mt-[100px]">
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full mx-auto flex justify-center items-center rounded-full bg-[#00C1C9] text-white py-2 font-medium border-b-4 border-lime-400 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? 'Creating...' : 'Add Reservation'}
+      </button>
     </div>
-  );
+  </form>
+</div>);
 }

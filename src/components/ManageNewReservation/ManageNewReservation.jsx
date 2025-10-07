@@ -1,116 +1,57 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import AddReservationForm from "./AddReservationForm"; // Import the new component
+import AddReservationForm from "./AddReservationForm";
+import { reservationService } from "@/lib/reservationService";
 
-const reservations = [
-  {
-    id: 1,
-    table: "Table #1",
-    guestName: "Robo Gladiators",
-    partySize: 4,
-    time: "12:30 PM",
-    date: "March 15, 2024",
-    avatar: "https://placehold.co/24x24/00C1C9/FFFFFF?text=RG", // Placeholder image for avatar
-  },
-  {
-    id: 2,
-    table: "Table #2",
-    guestName: "Robo Gladiators",
-    partySize: 2,
-    time: "11:30 PM",
-    date: "March 15, 2024",
-    avatar: "https://placehold.co/24x24/00C1C9/FFFFFF?text=RG",
-  },
-  {
-    id: 3,
-    table: "Table #3",
-    guestName: "Robo Gladiators",
-    partySize: 1,
-    time: "10:30 PM",
-    date: "March 15, 2024",
-    avatar: "https://placehold.co/24x24/00C1C9/FFFFFF?text=RG",
-  },
-  {
-    id: 4,
-    table: "Table #4",
-    guestName: "Robo Gladiators",
-    partySize: 4,
-    time: "8:30 PM",
-    date: "March 15, 2024",
-    avatar: "https://placehold.co/24x24/00C1C9/FFFFFF?text=RG",
-  },
-  {
-    id: 5,
-    table: "Table #5",
-    guestName: "Another Guest",
-    partySize: 3,
-    time: "7:00 PM",
-    date: "March 16, 2024",
-    avatar: "https://placehold.co/24x24/FF6347/FFFFFF?text=AG",
-  },
-  {
-    id: 6,
-    table: "Table #6",
-    guestName: "Third Party",
-    partySize: 5,
-    time: "9:00 PM",
-    date: "March 16, 2024",
-    avatar: "https://placehold.co/24x24/9370DB/FFFFFF?text=TP",
-  },
-  {
-    id: 7,
-    table: "Table #7",
-    guestName: "Fourth Guest",
-    partySize: 2,
-    time: "6:00 PM",
-    date: "March 17, 2024",
-    avatar: "https://placehold.co/24x24/3CB371/FFFFFF?text=FG",
-  },
-  {
-    id: 8,
-    table: "Table #8",
-    guestName: "Fifth Group",
-    partySize: 6,
-    time: "8:00 PM",
-    date: "March 17, 2024",
-    avatar: "https://placehold.co/24x24/FFA500/FFFFFF?text=FG",
-  },
-  {
-    id: 9,
-    table: "Table #9",
-    guestName: "Sixth Person",
-    partySize: 1,
-    time: "5:00 PM",
-    date: "March 18, 2024",
-    avatar: "https://placehold.co/24x24/6A5ACD/FFFFFF?text=SP",
-  },
-  {
-    id: 10,
-    table: "Table #10",
-    guestName: "Seventh Party",
-    partySize: 4,
-    time: "1:00 PM",
-    date: "March 18, 2024",
-    avatar: "https://placehold.co/24x24/DA70D6/FFFFFF?text=SP",
-  },
-];
 
 export default function ManageNewReservation() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [showAddReservationForm, setShowAddReservationForm] = useState(false); // State for form visibility
-  const itemsPerPage = 6; // Set the number of items per page as seen in the screenshot
+  const [showAddReservationForm, setShowAddReservationForm] = useState(false);
+  const [reservations, setReservations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  const itemsPerPage = 6;
+
+  // Fetch reservations on mount
+  useEffect(() => {
+    fetchReservations();
+  }, []);
+
+  const fetchReservations = async () => {
+    setLoading(true);
+    const result = await reservationService.getReservations();
+    
+    if (result.success) {
+      setReservations(result.data);
+      setError(null);
+    } else {
+      setError(result.error);
+    }
+    setLoading(false);
+  };
+
+  const handleCancelReservation = async (reservationId) => {
+    if (!confirm('Are you sure you want to cancel this reservation?')) return;
+
+    const result = await reservationService.updateReservationStatus(reservationId, 'cancelled');
+    
+    if (result.success) {
+      fetchReservations(); // Refresh list
+      alert('Reservation cancelled successfully');
+    } else {
+      alert(result.error);
+    }
+  };
 
   const filteredReservations = reservations.filter((r) =>
-    r.guestName.toLowerCase().includes(search.toLowerCase())
+    r.guest_name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Calculate the total number of pages
   const totalPages = Math.ceil(filteredReservations.length / itemsPerPage);
-
-  // Get current reservations for the displayed page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentReservations = filteredReservations.slice(
@@ -118,33 +59,51 @@ export default function ManageNewReservation() {
     indexOfLastItem
   );
 
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Go to previous page
   const goToPrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  // Go to next page
   const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
-  // Generate page numbers for pagination
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
-  }  
+  }
+
+  const formatTime = (time) => {
+    // Convert 18:30:00 to 6:30 PM
+    const [hours, minutes] = time.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:${minutes} ${ampm}`;
+  };
+
+  const formatDate = (date) => {
+    // Convert 2025-10-15 to October 15, 2025
+    const d = new Date(date);
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
+  if (loading) {
+    return <div className="text-white p-4">Loading reservations...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500 p-4">Error: {error}</div>;
+  }
 
   return (
     <>
       {showAddReservationForm ? (
-        <AddReservationForm onClose={() => setShowAddReservationForm(false)} />
+        <AddReservationForm 
+          onClose={() => setShowAddReservationForm(false)} 
+          onSuccess={fetchReservations}
+        />
       ) : (
         <>
           <div className="bg-[#3F3F3F] text-white p-4 rounded-md font-sans">
@@ -152,7 +111,7 @@ export default function ManageNewReservation() {
               <h2 className="text-lg font-semibold">Manage New Reservation</h2>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setShowAddReservationForm(true)} // Set state to true on click
+                  onClick={() => setShowAddReservationForm(true)}
                   className="flex items-center gap-2 bg-[#FFFFFF1A] text-white px-4 py-2 rounded-full text-[12px] font-normal hover:bg-[#00A0A8] transition-colors"
                 >
                   <svg
@@ -165,40 +124,36 @@ export default function ManageNewReservation() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="lucide lucide-plus"
                   >
                     <path d="M12 5V19" />
                     <path d="M5 12H19" />
                   </svg>
                   Add Reservation
                 </button>
-              <div className="flex items-center gap-4">
-                            <div className="flex items-center ">
-                              <div className="relative">
-                                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                <input
-                                  type="text"
-                                  placeholder="Search"
-                                  className="pl-10 pr-4 py-2 bg-[#F3FAFA1A] rounded-tl-[7.04px] rounded-bl-[7.04px] border-[1px] border-[#0000001A] text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                 value={search}
-                    onChange={(e) => {
-                      setSearch(e.target.value);
-                      setCurrentPage(1); 
-                    }}
-                                  autoComplete="off"
-                                />
-                              </div>
-                              <button className="hover:bg-gray-700 transition-colors bg-[#2A2A2A] p-[5px] rounded-tr-[7.04px] rounded-br-[7.04px]">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
-                                  <path d="M11 8.5L20 8.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                                  <path d="M4 16.5L14 16.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                                  <ellipse cx="7" cy="8.5" rx="3" ry="3" transform="rotate(90 7 8.5)" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                                  <ellipse cx="17" cy="16.5" rx="3" ry="3" transform="rotate(90 17 16.5)" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                                </svg>
-                              </button>
-                            </div>
-                          </div>
-                
+                <div className="flex items-center">
+                  <div className="relative">
+                    <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Search"
+                      className="pl-10 pr-4 py-2 bg-[#F3FAFA1A] rounded-tl-[7.04px] rounded-bl-[7.04px] border-[1px] border-[#0000001A] text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      value={search}
+                      onChange={(e) => {
+                        setSearch(e.target.value);
+                        setCurrentPage(1);
+                      }}
+                      autoComplete="off"
+                    />
+                  </div>
+                  <button className="hover:bg-gray-700 transition-colors bg-[#2A2A2A] p-[5px] rounded-tr-[7.04px] rounded-br-[7.04px]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+                      <path d="M11 8.5L20 8.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                      <path d="M4 16.5L14 16.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                      <ellipse cx="7" cy="8.5" rx="3" ry="3" transform="rotate(90 7 8.5)" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                      <ellipse cx="17" cy="16.5" rx="3" ry="3" transform="rotate(90 17 16.5)" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
             <div className="overflow-x-auto">
@@ -210,6 +165,7 @@ export default function ManageNewReservation() {
                     <th className="px-4 py-2">Party Size</th>
                     <th className="px-4 py-2">Time</th>
                     <th className="px-4 py-2">Date</th>
+                    <th className="px-4 py-2">Status</th>
                     <th className="px-4 py-2">Action</th>
                   </tr>
                 </thead>
@@ -217,37 +173,41 @@ export default function ManageNewReservation() {
                   {currentReservations.map((res) => (
                     <tr
                       key={res.id}
-                      className="border-b-[0.49px] border-b-[rgba(208,208,208,0.8)] h"
+                      className="border-b-[0.49px] border-b-[rgba(208,208,208,0.8)]"
                     >
                       <td className="px-4 py-2 align-middle text-center">
-                        {res.table}
+                        {res.table_number || 'Not assigned'}
                       </td>
                       <td className="px-4 py-2 flex items-center gap-2 justify-center align-middle">
-                        <img
-                          src={res.avatar}
-                          alt={res.guestName}
-                          className="w-6 h-6 rounded-full object-cover"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = `https://placehold.co/24x24/00C1C9/FFFFFF?text=${res.guestName.charAt(
-                              0
-                            )}`;
-                          }} // Fallback for image loading errors
-                        />
-                        {res.guestName}
+                        <div className="w-6 h-6 rounded-full bg-[#00C1C9] flex items-center justify-center text-xs">
+                          {res.guest_name.charAt(0)}
+                        </div>
+                        {res.guest_name}
                       </td>
                       <td className="px-4 py-2 align-middle text-center">
-                        {res.partySize}
+                        {res.party_size}
                       </td>
                       <td className="px-4 py-2 align-middle text-center">
-                        {res.time}
+                        {formatTime(res.booking_time)}
                       </td>
                       <td className="px-4 py-2 align-middle text-center">
-                        {res.date}
+                        {formatDate(res.booking_date)}
+                      </td>
+                      <td className="px-4 py-2 align-middle text-center">
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          res.status === 'pending' ? 'bg-yellow-500/20 text-yellow-500' :
+                          res.status === 'confirmed' ? 'bg-green-500/20 text-green-500' :
+                          res.status === 'cancelled' ? 'bg-red-500/20 text-red-500' :
+                          'bg-blue-500/20 text-blue-500'
+                        }`}>
+                          {res.status}
+                        </span>
                       </td>
                       <td className="px-4 py-2 flex items-center gap-[10px] justify-center align-middle">
-                    
-                        <button className="text-red-500 hover:text-red-700 border border-[#FF0000] rounded-[51px] p-[5px] ">
+                        <button 
+                          onClick={() => handleCancelReservation(res.id)}
+                          className="text-red-500 hover:text-red-700 border border-[#FF0000] rounded-[51px] p-[5px]"
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -264,7 +224,6 @@ export default function ManageNewReservation() {
                           </svg>
                         </button>
 
-                        {/* Replaced Next.js Link with a standard anchor tag */}
                         <a
                           href={`/vendor/manage-new-reservation/${res.id}`}
                           className="text-purple-400 border border-[#C267FF] hover:text-purple-600 rounded-[51px] p-[5px]"
@@ -333,7 +292,6 @@ export default function ManageNewReservation() {
                 {number}
               </button>
             ))}
-            {/* Show ellipsis if there are more than 4 pages and not near the end */}
             {totalPages > 4 && currentPage < totalPages - 2 && (
               <span className="text-gray-400">...</span>
             )}

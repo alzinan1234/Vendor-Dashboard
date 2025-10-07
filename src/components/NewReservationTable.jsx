@@ -137,7 +137,7 @@ export default function NewReservationTable() {
               >
                 <td className="px-4 py-2 align-middle text-center">
                   {res.table}
-                </td>{" "}
+                </td>
                 {/* Added text-center */}
                 <td className="px-4 py-2 flex items-center gap-2 justify-center align-middle">
                   <img
@@ -149,15 +149,15 @@ export default function NewReservationTable() {
                 </td>
                 <td className="px-4 py-2 align-middle text-center">
                   {res.partySize}
-                </td>{" "}
+                </td>
                 {/* Added text-center */} {/* Added text-center */}
                 <td className="px-4 py-2 align-middle text-center">
                   {res.time}
-                </td>{" "}
+                </td>
                 {/* Added text-center */}
                 <td className="px-4 py-2 align-middle text-center">
                   {res.date}
-                </td>{" "}
+                </td>
                 {/* Added text-center */}
                 <td className="px-4 py-2 flex items-center gap-[10px] justify-center align-middle">
                   <button className="bg-[#4BB54B1A] border border-[#4BB54B] rounded-[51px] p-[5px] flex justify-center items-center shrink-0 hover:text-green-600">

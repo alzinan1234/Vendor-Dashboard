@@ -1,6 +1,6 @@
-// API Configuration
+// API Configuration config.js
 export const API_CONFIG = {
-  BASE_URL: "https://resolutions-responded-stages-prepare.trycloudflare.com",
+  BASE_URL: "https://advertiser-capacity-beam-teachers.trycloudflare.com",
   ENDPOINTS: {
     LOGIN: "/api/basicuser/login/",
     PASSWORD_RESET_REQUEST: "/api/basicuser/password/reset-request/",
@@ -9,10 +9,24 @@ export const API_CONFIG = {
     PASSWORD_CHANGE: "/api/basicuser/password/change/",
     RESEND_OTP: "/api/basicuser/resend-otp/",
     VERIFY_OTP: "/api/basicuser/verify-otp/",
+    MY_VENUE: "/api/hospitality/my-venue/",
     BANK_DETAILS_CREATE: "/api/hospitality/bank-details/create/",
     BANK_DETAILS_GET: "/api/hospitality/bank-details/",
     BANK_DETAILS_UPDATE: "/api/hospitality/bank-details/update/",
-    // Add other endpoints here as needed
+    RESERVATIONS_GET: "/api/hospitality/reservations/",
+    // Dynamic endpoints - ID will be inserted by service functions
+    RESERVATIONS_GET_DETAIL: (reservationId) => `/api/hospitality/reservations/${reservationId}/`,
+  RESERVATIONS_CREATE: "/api/hospitality/reservations/create/",
+   RESERVATIONS_UPDATE: (reservationId) => `/api/hospitality/reservations/${reservationId}/update/`,
+   RESERVATIONS_UPDATE_STATUS: (reservationId) => `/api/hospitality/reservations/${reservationId}/status/`,
+    BANNERS_GET: (venueId) => `/api/hospitality/venues/${venueId}/banners/`,
+    BANNERS_CREATE: "/api/hospitality/banners/create/",
+    BANNERS_UPDATE: (bannerId) => `/api/hospitality/banners/${bannerId}/update/`,
+    BANNERS_DELETE: (bannerId) => `/api/hospitality/banners/${bannerId}/delete/`,
+    PROMOTIONS_GET: (venueId) => `/api/hospitality/venues/${venueId}/promotions/`,
+    PROMOTIONS_CREATE: "/api/hospitality/promotions/create/",
+    PROMOTIONS_UPDATE: (promotionId) => `/api/hospitality/promotions/${promotionId}/update/`,
+    PROMOTIONS_DELETE: (promotionId) => `/api/hospitality/promotions/${promotionId}/delete/`,
   }
 };
 
