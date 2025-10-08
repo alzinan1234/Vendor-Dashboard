@@ -8,7 +8,6 @@ export const venueService = {
   getMyVenueId: async () => {
     // Return cached ID if available
     if (cachedVenueId) return cachedVenueId;
-
     try {
       const token = tokenManager.getToken();
       if (!token) throw new Error('No auth token');
@@ -19,7 +18,6 @@ export const venueService = {
           'Authorization': `Bearer ${token}`,
         }
       });
-
       if (!response.ok) {
         if (response.status === 401) {
           tokenManager.removeToken();
@@ -27,7 +25,6 @@ export const venueService = {
         }
         throw new Error('Failed to get venue');
       }
-
       const data = await response.json();
       cachedVenueId = data.data.id;
       return cachedVenueId;
@@ -36,7 +33,6 @@ export const venueService = {
       throw error;
     }
   },
-
   clearCache: () => {
     cachedVenueId = null;
   }

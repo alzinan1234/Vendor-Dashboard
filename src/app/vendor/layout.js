@@ -6,6 +6,7 @@ import './admin.css';
 import Sidebar from '@/components/Sidebar';
 import Topbar from '@/components/Topbar';
 import NotificationPage from '@/components/Notification/NotificationPage';
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -42,6 +43,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+         <Toaster position="top-center" />
         <div className="flex bg-black text-white min-h-screen">
           <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
 

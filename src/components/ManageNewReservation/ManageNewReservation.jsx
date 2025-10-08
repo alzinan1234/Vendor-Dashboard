@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import AddReservationForm from "./AddReservationForm";
 import { reservationService } from "@/lib/reservationService";
-
+import toast from 'react-hot-toast'; // Import react-hot-toast
 
 export default function ManageNewReservation() {
   const [search, setSearch] = useState("");
@@ -34,16 +34,17 @@ export default function ManageNewReservation() {
     setLoading(false);
   };
 
+  // --- MODIFIED FUNCTION ---
   const handleCancelReservation = async (reservationId) => {
-    if (!confirm('Are you sure you want to cancel this reservation?')) return;
-
+    // The confirmation dialog is now removed.
     const result = await reservationService.updateReservationStatus(reservationId, 'cancelled');
     
     if (result.success) {
       fetchReservations(); // Refresh list
-      alert('Reservation cancelled successfully');
+      toast.success('Reservation cancelled successfully'); // Replaced alert with success toast
     } else {
-      alert(result.error);
+      // Replaced alert with error toast. Added a fallback message.
+      toast.error(result.error || 'Failed to cancel reservation');
     }
   };
 
@@ -75,7 +76,6 @@ export default function ManageNewReservation() {
   }
 
   const formatTime = (time) => {
-    // Convert 18:30:00 to 6:30 PM
     const [hours, minutes] = time.split(':');
     const hour = parseInt(hours);
     const ampm = hour >= 12 ? 'PM' : 'AM';
@@ -84,7 +84,6 @@ export default function ManageNewReservation() {
   };
 
   const formatDate = (date) => {
-    // Convert 2025-10-15 to October 15, 2025
     const d = new Date(date);
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   };

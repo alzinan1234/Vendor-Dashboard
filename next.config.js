@@ -5,7 +5,8 @@ const nextConfig = {
     domains: [
       "via.placeholder.com", 
       "placehold.co",
-      "advertiser-capacity-beam-teachers.trycloudflare.com"
+      "advertiser-capacity-beam-teachers.trycloudflare.com",
+      "donation-furthermore-shame-quiz.trycloudflare.com"
     ],
   },
 };

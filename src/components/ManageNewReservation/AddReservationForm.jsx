@@ -1,9 +1,9 @@
 "use client";
 
+import React, { useState } from "react";
 import { reservationService } from "@/lib/reservationService";
 import { venueService } from "@/lib/venueService";
-import React, { useState, useEffect } from "react";
-
+import toast from 'react-hot-toast';
 
 export default function AddReservationForm({ onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
@@ -24,10 +24,11 @@ export default function AddReservationForm({ onClose, onSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    const loadingToast = toast.loading('Creating reservation...');
     setLoading(true);
 
     try {
-      // Get venue ID
       const venueId = await venueService.getMyVenueId();
 
       const result = await reservationService.createReservation({
@@ -39,15 +40,18 @@ export default function AddReservationForm({ onClose, onSuccess }) {
         specialRequests: formData.specialRequests
       });
 
+      toast.dismiss(loadingToast);
+
       if (result.success) {
-        alert('Reservation created successfully!');
-        onSuccess(); // Refresh parent list
+        toast.success('Reservation created successfully!');
+        onSuccess();
         onClose();
       } else {
-        alert(result.error);
+        toast.error(result.error || 'Failed to create reservation');
       }
     } catch (error) {
-      alert('Failed to create reservation: ' + error.message);
+      toast.dismiss(loadingToast);
+      toast.error('Failed to create reservation: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -87,7 +91,7 @@ export default function AddReservationForm({ onClose, onSuccess }) {
             value={formData.guestName}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
+            className="w-full px-3 py-2  border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
             placeholder="Enter guest name"
           />
         </div>
@@ -104,7 +108,7 @@ export default function AddReservationForm({ onClose, onSuccess }) {
             onChange={handleChange}
             required
             min="1"
-            className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
+            className="w-full px-3 py-2  border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
             placeholder="Enter party size"
           />
         </div>
@@ -120,7 +124,7 @@ export default function AddReservationForm({ onClose, onSuccess }) {
             value={formData.bookingTime}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
+            className="w-full px-3 py-2  border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
           />
         </div>
 
@@ -135,7 +139,7 @@ export default function AddReservationForm({ onClose, onSuccess }) {
             value={formData.bookingDate}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
+            className="w-full px-3 py-2  border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
           />
         </div>
 
@@ -149,18 +153,21 @@ export default function AddReservationForm({ onClose, onSuccess }) {
             value={formData.specialRequests}
             onChange={handleChange}
             rows="3"
-            className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500text-white"
-placeholder="Any special requests..."
-/>
-</div><div className="col-span-full bottom-0 mt-[100px]">
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full mx-auto flex justify-center items-center rounded-full bg-[#00C1C9] text-white py-2 font-medium border-b-4 border-lime-400 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {loading ? 'Creating...' : 'Add Reservation'}
-      </button>
+            className="w-full px-3 py-2  border border-[#CACACA] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-white"
+            placeholder="Any special requests..."
+          />
+        </div>
+
+        <div className="col-span-full bottom-0 mt-[100px]">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full mx-auto flex justify-center items-center rounded-full bg-[#00C1C9] text-white py-2 font-medium border-b-4 border-lime-400 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Creating...' : 'Add Reservation'}
+          </button>
+        </div>
+      </form>
     </div>
-  </form>
-</div>);
+  );
 }

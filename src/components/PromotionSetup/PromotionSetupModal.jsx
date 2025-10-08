@@ -13,6 +13,7 @@ export default function PromotionSetupModal({ onClose, onSave, initialData = nul
   const [imagePreview, setImagePreview] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+
   // Populate form when editing
   useEffect(() => {
     if (initialData) {
