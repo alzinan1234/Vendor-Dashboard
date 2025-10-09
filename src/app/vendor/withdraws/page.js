@@ -1,7 +1,9 @@
 "use client"
 
-import WithdrawRequestComponent from '@/components/Withdraws/WithdrawRequestComponent'
+i18n
+import WithdrawRequestComponent from '@/components/Withdraws/WithdrawRequestComponent';
 import WithdrawsComponent from '@/components/Withdraws/WithdrawsComponent'
+import { i18n } from 'jodit/esm/core/helpers';
 import { useState } from 'react';
 import React from 'react'
 
