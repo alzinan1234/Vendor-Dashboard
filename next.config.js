@@ -6,7 +6,8 @@ const nextConfig = {
       "via.placeholder.com", 
       "placehold.co",
       "advertiser-capacity-beam-teachers.trycloudflare.com",
-      "donation-furthermore-shame-quiz.trycloudflare.com"
+      "donation-furthermore-shame-quiz.trycloudflare.com",
+      "gratis-month-versus-packard.trycloudflare.com"
     ],
   },
 };

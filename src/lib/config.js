@@ -1,6 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: "https://donation-furthermore-shame-quiz.trycloudflare.com",
+  BASE_URL: "https://gratis-month-versus-packard.trycloudflare.com",
   ENDPOINTS: {
     // Authentication
     LOGIN: "/api/hospitality/login/",
@@ -40,6 +40,20 @@ export const API_CONFIG = {
     PROMOTIONS_UPDATE: (promotionId) => `/api/hospitality/promotions/${promotionId}/update/`,
     PROMOTIONS_DELETE: (promotionId) => `/api/hospitality/promotions/${promotionId}/delete/`,
     
+    // Nightlife Events
+    NIGHTLIFE_EVENTS_GET: (venueId) => `/api/hospitality/venues/${venueId}/nightlife-events/`,
+    NIGHTLIFE_EVENTS_CREATE: "/api/hospitality/nightlife-events/create/",
+    NIGHTLIFE_EVENTS_UPDATE: (eventId) => `/api/hospitality/nightlife-events/${eventId}/update/`,
+    NIGHTLIFE_EVENTS_DELETE: (eventId) => `/api/hospitality/nightlife-events/${eventId}/delete/`,
+    
+    // Entry Types
+    ENTRY_TYPES_GET: "/api/hospitality/entry-types/",
+    ENTRY_TYPES_CREATE: "/api/hospitality/entry-types/create/",
+    
+    // Time Slots
+    TIME_SLOTS_GET: (venueId) => `/api/hospitality/venues/${venueId}/time-slots/`,
+    TIME_SLOTS_CREATE: "/api/hospitality/time-slots/create/",
+    
     // Profile Management
     PROFILE_GET: "/api/hospitality/profile-management/",
     PROFILE_CREATE: "/api/hospitality/profile-management/create/",
@@ -61,21 +75,11 @@ export const API_CONFIG = {
     // Earnings Reports
     EARNINGS_REPORTS_GET: "/api/hospitality/earnings-reports/",
     
-    // Reviews - All Dynamic Endpoints (Based on API Response Structure)
-    // Public endpoint - Get all reviews for a specific venue
+    // Reviews
     REVIEWS_GET: (venueId) => `/api/hospitality/venues/${venueId}/reviews/`,
-    
-    // User creates a review for a venue
     REVIEWS_CREATE: (venueId) => `/api/hospitality/venues/${venueId}/reviews/create/`,
-    
-    // Dashboard endpoint - Get reviews for the authenticated venue owner (DYNAMIC)
     REVIEWS_DASHBOARD_GET: (venueId) => `/api/hospitality/venues/${venueId}/dashboard/reviews/`,
-    
-    // Venue owner replies to a review (DYNAMIC - uses venue ID from auth)
     REVIEWS_REPLY: (venueId, reviewId) => `/api/hospitality/venues/${venueId}/reviews/${reviewId}/reply/`,
-    
-    
-    // Delete review (if needed)
     REVIEWS_DELETE: (venueId, reviewId) => `/api/hospitality/venues/${venueId}/reviews/${reviewId}/delete/`,
   }
 };
