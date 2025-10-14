@@ -116,9 +116,12 @@ export const profileService = {
       formData.append('phone_number', profileData.phoneNumber || '');
       formData.append('email', profileData.email || '');
       
-      if (operatingHoursId) {
-        formData.append('hospitality_venue_operating_hours', operatingHoursId);
+      // Operating hours is required, throw error if not provided
+      if (!operatingHoursId) {
+        throw new Error('Operating hours must be set before creating profile');
       }
+      
+      formData.append('hospitality_venue_operating_hours', operatingHoursId);
       
       // Add images
       images.forEach((file) => {
@@ -288,6 +291,17 @@ export const operatingHoursService = {
     try {
       const token = tokenManager.getToken();
       if (!token) throw new Error('No authentication token found. Please login.');
+
+      // First check if operating hours already exist
+      const existingHours = await operatingHoursService.getOperatingHours(venueId);
+      if (existingHours.success && existingHours.data && existingHours.data.length > 0) {
+        // Use the existing operating hours ID
+        return {
+          success: true,
+          data: existingHours.data[0].id,
+          message: 'Using existing operating hours'
+        };
+      }
 
       const results = [];
       

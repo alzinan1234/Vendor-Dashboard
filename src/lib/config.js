@@ -1,17 +1,17 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: "https://gratis-month-versus-packard.trycloudflare.com",
+  BASE_URL: "https://twist-steps-ideal-antonio.trycloudflare.com",
   ENDPOINTS: {
     // Authentication
     LOGIN: "/api/hospitality/login/",
     
     // Password Management
-    PASSWORD_RESET_REQUEST: "/api/basicuser/password/reset-request/",
-    PASSWORD_RESET_VERIFY_OTP: "/api/basicuser/password/reset-verify-otp/",
-    PASSWORD_RESET_CONFIRM: "/api/basicuser/password/reset-confirm/",
-    PASSWORD_CHANGE: "/api/basicuser/password/change/",
-    RESEND_OTP: "/api/basicuser/resend-otp/",
-    VERIFY_OTP: "/api/basicuser/verify-otp/",
+    PASSWORD_RESET_REQUEST: "/api/accounts/password/reset-request/",
+    PASSWORD_RESET_VERIFY_OTP: "/api/accounts/password/reset-verify-otp/",
+    PASSWORD_RESET_CONFIRM: "/api/accounts/password/reset-confirm/",
+    PASSWORD_CHANGE: "/api/accounts/password/change/",
+    RESEND_OTP: "/api/accounts/resend-otp/",
+    VERIFY_OTP: "/api/accounts/verify-otp/",
     
     // Venue Management
     MY_VENUE: "/api/hospitality/my-venue/",
