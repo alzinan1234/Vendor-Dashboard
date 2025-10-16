@@ -20,6 +20,30 @@ export const API_CONFIG = {
     BANK_DETAILS_CREATE: "/api/hospitality/bank-details/create/",
     BANK_DETAILS_GET: "/api/hospitality/bank-details/",
     BANK_DETAILS_UPDATE: "/api/hospitality/bank-details/update/",
+
+
+       // ==================== ORDERS ====================
+    // List and Create
+    ORDERS_GET: "/api/hospitality/orders/",
+    ORDERS_CREATE: "/api/hospitality/orders/create/",
+    
+    // Detail, Update and Status
+    ORDERS_GET_DETAIL: (orderId) => `/api/hospitality/orders/${orderId}/`,
+    ORDERS_UPDATE: (orderId) => `/api/hospitality/orders/${orderId}/update/`,
+    ORDERS_UPDATE_STATUS: (orderId) => `/api/hospitality/orders/${orderId}/status/`,
+    
+    // Customer Order History
+    MY_ORDERS: "/api/hospitality/my-orders/",
+    
+    // ==================== ORDER ITEMS ====================
+    ORDER_ITEMS_GET: "/api/hospitality/order-items/",
+    ORDER_ITEMS_GET_DETAIL: (itemId) => `/api/hospitality/order-items/${itemId}/`,
+    
+    // Order Item Actions
+    ORDER_ITEMS_ACCEPT: (itemId) => `/api/hospitality/order-items/${itemId}/accept/`,
+    ORDER_ITEMS_CANCEL: (itemId) => `/api/hospitality/order-items/${itemId}/cancel/`,
+    ORDER_ITEMS_MARK_PAID: (itemId) => `/api/hospitality/order-items/${itemId}/mark-paid/`,
+    ORDER_ITEMS_UPDATE: (itemId) => `/api/hospitality/order-items/${itemId}/update/`,
     
     // Reservations
     RESERVATIONS_GET: "/api/hospitality/reservations/",

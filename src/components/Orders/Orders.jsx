@@ -1,23 +1,79 @@
+// components/Orders.js
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import useRouter from next/navigation for App Router
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { mockOrders } from '../lib/orders';
-; // Import mock data from the central file
+import orderService from '@/lib/orderService';
+
 
 const Orders = () => {
-  const [orders, setOrders] = useState(mockOrders);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const ordersPerPage = 10;
-  const router = useRouter(); // Initialize the router
+  const router = useRouter();
+
+  // Fetch orders from API
+  const fetchOrders = async (page = 1) => {
+    try {
+      setLoading(true);
+      const result = await orderService.getAllOrders({ 
+        page: page,
+        // You can add other filters here: status, date_from, date_to
+      });
+      
+      if (result.success) {
+        setOrders(result.data);
+        setTotalCount(result.count);
+      } else {
+        console.error('Failed to fetch orders:', result.error);
+        // You might want to show a toast notification here
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders(currentPage);
+  }, [currentPage]);
 
   // Handler to navigate to the order details page
   const handleViewDetails = (orderId) => {
     router.push(`/vendor/orders/${orderId}`);
   };
-  
+
+  // Handler for accepting order item
+  const handleAcceptItem = async (itemId) => {
+    const result = await orderService.acceptOrderItem(itemId);
+    if (result.success) {
+      // Refresh orders to get updated status
+      fetchOrders(currentPage);
+      // You might want to show a success toast here
+    } else {
+      console.error('Failed to accept item:', result.error);
+      // Show error toast
+    }
+  };
+
+  // Handler for cancelling order item
+  const handleCancelItem = async (itemId) => {
+    const result = await orderService.cancelOrderItem(itemId);
+    if (result.success) {
+      // Refresh orders to get updated status
+      fetchOrders(currentPage);
+      // You might want to show a success toast here
+    } else {
+      console.error('Failed to cancel item:', result.error);
+      // Show error toast
+    }
+  };
+
   // Filter orders based on search term
   const filteredOrders = orders.filter(order =>
     Object.values(order).some(value =>
@@ -26,12 +82,10 @@ const Orders = () => {
   );
 
   // Calculate total pages for pagination
-  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+  const totalPages = Math.ceil(totalCount / ordersPerPage);
 
   // Get current orders for the displayed page
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentOrders = filteredOrders;
 
   // Handle page change
   const handlePageChange = (pageNumber) => {
@@ -61,6 +115,31 @@ const Orders = () => {
 
   const paginationRange = getPaginationRange(currentPage, totalPages);
 
+  // Status badge styling
+  const getStatusBadge = (status) => {
+    const statusConfig = {
+      pending: { color: 'text-orange-400', bg: 'bg-orange-900 bg-opacity-30' },
+      confirmed: { color: 'text-blue-400', bg: 'bg-blue-900 bg-opacity-30' },
+      served: { color: 'text-purple-400', bg: 'bg-purple-900 bg-opacity-30' },
+      completed: { color: 'text-green-400', bg: 'bg-green-900 bg-opacity-30' },
+      cancelled: { color: 'text-red-400', bg: 'bg-red-900 bg-opacity-30' }
+    };
+    
+    const config = statusConfig[status] || statusConfig.pending;
+    return `inline-flex px-2 text-xs font-semibold leading-5 rounded-full ${config.color} ${config.bg}`;
+  };
+
+  if (loading) {
+    return (
+      <div className="bg-[#343434] text-gray-100 p-4 font-inter rounded-lg min-h-64 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-gray-300">Loading orders...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="bg-[#343434] text-gray-100 p-4 font-inter rounded-lg">
@@ -71,14 +150,14 @@ const Orders = () => {
         <div className="mx-auto rounded-lg">
           {/* Header Section */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-            <h1 className="text-3xl font-bold text-white mb-4 sm:mb-0">Orders</h1>
+            <h1 className="text-3xl font-bold text-white mb-4 sm:mb-0">Orders ({totalCount})</h1>
             <div className="flex items-center gap-4">
               <div className="flex items-center ">
                 <div className="relative">
                   <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Search"
+                    placeholder="Search orders..."
                     className="pl-10 pr-4 py-2 bg-[#F3FAFA1A] rounded-tl-[7.04px] rounded-bl-[7.04px] border-[1px] border-[#0000001A] text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -103,30 +182,40 @@ const Orders = () => {
                 <tr>
                   <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider rounded-tl-lg">Order ID</th>
                   <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">Customer Name</th>
-                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">QR Order</th>
                   <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">Table</th>
                   <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">Quantity</th>
                   <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
                   <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">Amount</th>
-                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider rounded-tr-lg">Action</th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider rounded-tr-lg">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-700">
-                {currentOrders.map((order, index) => (
-                  <tr key={index} className="transition duration-200">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200 text-center">{order.orderId}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{order.customerName}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{order.qrOrder}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{order.table}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{order.quantity}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                      <span className="inline-flex px-2 text-xs font-semibold leading-5 rounded-full text-orange-400 bg-orange-900 bg-opacity-30">{order.status}</span>
+                {currentOrders.length === 0 ? (
+                  <tr>
+                    <td colSpan="7" className="px-6 py-8 text-center text-gray-400">
+                      No orders found
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{order.amount}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-2 justify-center">
-                      {/* MODIFIED: onClick handler to navigate to the details page */}
-
-                          <button className="bg-[#4BB54B1A] border border-[#4BB54B] rounded-[51px] p-[5px] flex justify-center items-center shrink-0 hover:text-green-600">
+                  </tr>
+                ) : (
+                  currentOrders.map((order, index) => (
+                    <tr key={order.id} className="transition duration-200 hover:bg-gray-800">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200 text-center">{order.orderId}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{order.customerName}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{order.table}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{order.quantity}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
+                        <span className={getStatusBadge(order.status)}>
+                          {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">{order.amount}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-2 justify-center">
+                        {/* Accept Button */}
+                        <button 
+                          onClick={() => handleAcceptItem(order.items?.[0]?.id)}
+                          className="bg-[#4BB54B1A] border border-[#4BB54B] rounded-[51px] p-[5px] flex justify-center items-center shrink-0 hover:text-green-600 transition-colors"
+                          title="Accept Order"
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -142,49 +231,76 @@ const Orders = () => {
                             />
                           </svg>
                         </button>
-                      <button onClick={() => handleViewDetails(order.orderId)} className="text-purple-400 border border-[#C267FF] hover:text-purple-600 rounded-[51px] p-[5px]">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 11" fill="none">
-                          <path d="M14.3628 4.63424C14.5655 4.91845 14.6668 5.06056 14.6668 5.27091C14.6668 5.48127 14.5655 5.62338 14.3628 5.90759C13.4521 7.18462 11.1263 9.93758 8.00016 9.93758C4.87402 9.93758 2.54823 7.18462 1.63752 5.90759C1.43484 5.62338 1.3335 5.48127 1.3335 5.27091C1.3335 5.06056 1.43484 4.91845 1.63752 4.63424C2.54823 3.35721 4.87402 0.604248 8.00016 0.604248C11.1263 0.604248 13.4521 3.35721 14.3628 4.63424Z" stroke="#C267FF" />
-                          <path d="M10 5.271C10 4.16643 9.10457 3.271 8 3.271C6.89543 3.271 6 4.16643 6 5.271C6 6.37557 6.89543 7.271 8 7.271C9.10457 7.271 10 6.37557 10 5.271Z" stroke="#C267FF" />
-                        </svg>
-                      </button>
-                      <button className="text-red-500 hover:text-red-700 border border-[#FF0000] rounded-[51px] p-[5px]">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 12 11" fill="none">
-                          <path d="M10.6668 0.684326L1.3335 10.0177M1.3335 0.684326L10.6668 10.0177" stroke="#FF0000" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                        
+                        {/* View Details Button */}
+                        <button 
+                          onClick={() => handleViewDetails(order.orderId)} 
+                          className="text-purple-400 border border-[#C267FF] hover:text-purple-600 rounded-[51px] p-[5px] transition-colors"
+                          title="View Details"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 11" fill="none">
+                            <path d="M14.3628 4.63424C14.5655 4.91845 14.6668 5.06056 14.6668 5.27091C14.6668 5.48127 14.5655 5.62338 14.3628 5.90759C13.4521 7.18462 11.1263 9.93758 8.00016 9.93758C4.87402 9.93758 2.54823 7.18462 1.63752 5.90759C1.43484 5.62338 1.3335 5.48127 1.3335 5.27091C1.3335 5.06056 1.43484 4.91845 1.63752 4.63424C2.54823 3.35721 4.87402 0.604248 8.00016 0.604248C11.1263 0.604248 13.4521 3.35721 14.3628 4.63424Z" stroke="#C267FF" />
+                            <path d="M10 5.271C10 4.16643 9.10457 3.271 8 3.271C6.89543 3.271 6 4.16643 6 5.271C6 6.37557 6.89543 7.271 8 7.271C9.10457 7.271 10 6.37557 10 5.271Z" stroke="#C267FF" />
+                          </svg>
+                        </button>
+                        
+                        {/* Cancel Button */}
+                        <button 
+                          onClick={() => handleCancelItem(order.items?.[0]?.id)}
+                          className="text-red-500 hover:text-red-700 border border-[#FF0000] rounded-[51px] p-[5px] transition-colors"
+                          title="Cancel Order"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 12 11" fill="none">
+                            <path d="M10.6668 0.684326L1.3335 10.0177M1.3335 0.684326L10.6668 10.0177" stroke="#FF0000" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
         </div>
       </div>
+      
       {/* Pagination */}
-      <div className="flex justify-end items-center mt-6 gap-2 text-sm text-white">
-        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="w-8 h-8 flex items-center border rounded-full justify-center p-[10px] hover:bg-[#1f1f1f] disabled:opacity-50 disabled:cursor-not-allowed">
-          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M6.99995 13C6.99995 13 1.00001 8.58107 0.999999 6.99995C0.999986 5.41884 7 1 7 1" stroke="#E2E2E2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </button>
-        {paginationRange.map((pageNumber, index) => {
-          if (pageNumber === '...') {
-            return <span key={`ellipsis-${index}`} className="px-2">...</span>;
-          }
-          return (
-            <button
-              key={pageNumber}
-              onClick={() => handlePageChange(pageNumber)}
-              // Corrected className syntax
-              className={`w-8 h-8 flex items-center justify-center rounded ${currentPage === pageNumber ? "bg-[#21F6FF] text-black" : "hover:bg-[#1f1f1f]"}`}
-            >
-              {pageNumber}
-            </button>
-          );
-        })}
-        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="w-8 h-8 flex items-center border rounded-full justify-center hover:bg-[#1f1f1f] disabled:opacity-50 disabled:cursor-not-allowed">
-          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M1.00005 1C1.00005 1 6.99999 5.41893 7 7.00005C7.00001 8.58116 1 13 1 13" stroke="#C8C8C8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </button>
-      </div>
+      {totalPages > 1 && (
+        <div className="flex justify-end items-center mt-6 gap-2 text-sm text-white">
+          <button 
+            onClick={() => handlePageChange(currentPage - 1)} 
+            disabled={currentPage === 1} 
+            className="w-8 h-8 flex items-center border rounded-full justify-center p-[10px] hover:bg-[#1f1f1f] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M6.99995 13C6.99995 13 1.00001 8.58107 0.999999 6.99995C0.999986 5.41884 7 1 7 1" stroke="#E2E2E2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </button>
+          {paginationRange.map((pageNumber, index) => {
+            if (pageNumber === '...') {
+              return <span key={`ellipsis-${index}`} className="px-2">...</span>;
+            }
+            return (
+              <button
+                key={pageNumber}
+                onClick={() => handlePageChange(pageNumber)}
+                className={`w-8 h-8 flex items-center justify-center rounded ${
+                  currentPage === pageNumber 
+                    ? "bg-[#21F6FF] text-black" 
+                    : "hover:bg-[#1f1f1f]"
+                }`}
+              >
+                {pageNumber}
+              </button>
+            );
+          })}
+          <button 
+            onClick={() => handlePageChange(currentPage + 1)} 
+            disabled={currentPage === totalPages} 
+            className="w-8 h-8 flex items-center border rounded-full justify-center hover:bg-[#1f1f1f] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M1.00005 1C1.00005 1 6.99999 5.41893 7 7.00005C7.00001 8.58116 1 13 1 13" stroke="#C8C8C8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

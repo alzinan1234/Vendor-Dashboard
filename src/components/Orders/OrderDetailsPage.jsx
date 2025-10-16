@@ -12,7 +12,7 @@ const defaultMockOrder = {
   qrOrder: 'Mojito',
   table: 'Table #4',
   quantity: 2,
-  status: 'Pending',
+  status: 'Pending', 
   amount: '$200',
   date: '07/02/24',
   time: '7pm',
