@@ -215,9 +215,7 @@ export default function EarningsTable() {
               <tr className="bg-[#17787C] text-white text-center">
                 <th className="py-2 px-4">Serial</th>
                 <th className="py-2 px-4">User</th>
-                <th className="py-2 px-4">Subscription Type</th>
                 <th className="py-2 px-4">Amount</th>
-                <th className="py-2 px-4">Acc Number</th>
                 <th className="py-2 px-4">Date</th>
                 <th className="py-2 px-4">Action</th>
               </tr>
@@ -231,7 +229,7 @@ export default function EarningsTable() {
                   <td className="py-2 px-4">{item.serial}</td>
                   <td className="py-2 px-4 flex items-center gap-2 justify-center">
                     <Image
-                      src={item.userImagePath} // Use the image path from dummy data
+                      src={item.userImagePath}
                       alt="User"
                       width={24}
                       height={24}
@@ -239,9 +237,7 @@ export default function EarningsTable() {
                     />
                     {item.user}
                   </td>
-                  <td className="py-2 px-4">{item.subscription}</td>
                   <td className="py-2 px-4">{item.amount}</td>
-                  <td className="py-2 px-4">{item.accNumber}</td>
                   <td className="py-2 px-4">{item.date}</td>
                   <td className="py-2 px-4">
                     <button onClick={() => openTransactionDetails(item)}>

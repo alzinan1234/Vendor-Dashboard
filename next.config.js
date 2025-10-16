@@ -8,7 +8,8 @@ const nextConfig = {
       "advertiser-capacity-beam-teachers.trycloudflare.com",
       "donation-furthermore-shame-quiz.trycloudflare.com",
       "gratis-month-versus-packard.trycloudflare.com",
-      "twist-steps-ideal-antonio.trycloudflare.com"
+      "twist-steps-ideal-antonio.trycloudflare.com",
+      "job-remark-departmental-civic.trycloudflare.com"
     ],
   },
 };

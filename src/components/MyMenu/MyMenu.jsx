@@ -1,270 +1,68 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import EditItem from "./EditItem";
 import AddItem from "./AddItem";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { API_CONFIG } from "../../lib/config";
+import { qrService } from '../../lib/qrService';
+
+import toast, { Toaster } from 'react-hot-toast';
+import { myMenuService } from "@/lib/myMenueService";
 
 // MyMenu Component
 const MyMenu = ({ onBackClick, onAddClick }) => {
-  const [menuItems, setMenuItems] = useState([
-    {
-      id: 1,
-      image: "/bannerImage/tacos.jpg",
-      name: "Cheese Nachos",
-      category: "Starter",
-      price: "$49.99",
-      available: true,
-    },
-    {
-      id: 2,
-      image: "/menu/image1.jpg",
-      name: "Spicy Tacos",
-      category: "Main Course",
-      price: "$12.50",
-      available: true,
-    },
-    {
-      id: 3,
-      image: "/menu/image17.jpg",
-      name: "Chocolate Lava Cake",
-      category: "Dessert",
-      price: "$8.00",
-      available: false,
-    },
-    {
-      id: 4,
-      image: "/menu/image3.jpg",
-      name: "Caesar Salad",
-      category: "Starter",
-      price: "$9.25",
-      available: true,
-    },
-    {
-      id: 5,
-      image: "/bannerImage/tacos.jpg",
-      name: "Pepperoni Pizza",
-      category: "Main Course",
-      price: "$15.75",
-      available: true,
-    },
-    {
-      id: 6,
-      image: "/menu/image4.jpg",
-      name: "Vanilla Ice Cream",
-      category: "Dessert",
-      price: "$6.50",
-      available: true,
-    },
-    {
-      id: 7,
-      image: "/menu/image20.jpg",
-      name: "Garlic Bread",
-      category: "Starter",
-      price: "$5.00",
-      available: true,
-    },
-    {
-      id: 8,
-      image: "/menu/image1.jpg",
-      name: "Beef Burger",
-      category: "Main Course",
-      price: "$14.00",
-      available: true,
-    },
-    {
-      id: 9,
-      image: "/bannerImage/tacos.jpg",
-      name: "Cheesecake",
-      category: "Dessert",
-      price: "$9.00",
-      available: true,
-    },
-    {
-      id: 10,
-      image: "/menu/image20.jpg",
-      name: "Onion Rings",
-      category: "Starter",
-      price: "$7.00",
-      available: true,
-    },
-    {
-      id: 11,
-      image: "/bannerImage/tacos.jpg",
-      name: "Fish and Chips",
-      category: "Main Course",
-      price: "$17.00",
-      available: true,
-    },
-    {
-      id: 12,
-      image: "/menu/image1.jpg",
-      name: "Apple Pie",
-      category: "Dessert",
-      price: "$7.50",
-      available: true,
-    },
-    {
-      id: 13,
-      image: "/menu/image10.jpg",
-      name: "Spring Rolls",
-      category: "Starter",
-      price: "$6.00",
-      available: true,
-    },
-    {
-      id: 14,
-      image: "/menu/image11.jpg",
-      name: "Chicken Alfredo",
-      category: "Main Course",
-      price: "$16.00",
-      available: true,
-    },
-    {
-      id: 15,
-      image: "/menu/image12.jpg",
-      name: "Brownie Sundae",
-      category: "Dessert",
-      price: "$9.50",
-      available: true,
-    },
-    {
-      id: 16,
-      image: "/menu/image21.jpg",
-      name: "Mozzarella Sticks",
-      category: "Starter",
-      price: "$8.00",
-      available: true,
-    },
-    {
-      id: 17,
-      image: "/menu/image14.jpg",
-      name: "Veggie Pizza",
-      category: "Main Course",
-      price: "$14.50",
-      available: true,
-    },
-    {
-      id: 18,
-      image: "/menu/image15.jpg",
-      name: "Fruit Salad",
-      category: "Dessert",
-      price: "$7.00",
-      available: true,
-    },
-    {
-      id: 19,
-      image: "/menu/image21.jpg",
-      name: "Calamari",
-      category: "Starter",
-      price: "$10.00",
-      available: true,
-    },
-    {
-      id: 20,
-      image: "/menu/image17.jpg",
-      name: "Grilled Salmon",
-      category: "Main Course",
-      price: "$20.00",
-      available: true,
-    },
-    {
-      id: 21,
-      image: "/menu/image23.webp",
-      name: "Tiramisu",
-      category: "Dessert",
-      price: "$10.00",
-      available: true,
-    },
-    {
-      id: 22,
-      image: "/menu/image15.jpg",
-      name: "Hummus Plate",
-      category: "Starter",
-      price: "$7.50",
-      available: true,
-    },
-    {
-      id: 23,
-      image: "/menu/image23.webp",
-      name: "Lamb Chops",
-      category: "Main Course",
-      price: "$25.00",
-      available: true,
-    },
-    {
-      id: 24,
-      image: "/menu/image8.webp",
-      name: "Panna Cotta",
-      category: "Dessert",
-      price: "$8.50",
-      available: true,
-    },
-    {
-      id: 25,
-      image: "/menu/image21.jpg",
-      name: "Shrimp Scampi",
-      category: "Main Course",
-      price: "$19.00",
-      available: true,
-    },
-    {
-      id: 26,
-      image: "https://placehold.co/200x120/555555/FFFFFF?text=Nachos",
-      name: "Chicken Wings",
-      category: "Starter",
-      price: "$11.00",
-      available: true,
-    },
-    {
-      id: 27,
-      image: "/menu/image1.jpg",
-      name: "New York Cheesecake",
-      category: "Dessert",
-      price: "$9.50",
-      available: true,
-    },
-    {
-      id: 28,
-      image: "/image/menu-img.png",
-      name: "Sushi Platter",
-      category: "Main Course",
-      price: "$28.00",
-      available: true,
-    },
-    {
-      id: 29,
-      image: "/menu/image1.jpg",
-      name: "French Fries",
-      category: "Starter",
-      price: "$4.50",
-      available: true,
-    },
-    {
-      id: 30,
-      image: "/image/menu-img.png",
-      name: "Ravioli",
-      category: "Main Course",
-      price: "$16.50",
-      available: true,
-    },
-  ]);
+  const [menuItems, setMenuItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const itemsPerPage = 25;
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const [editingItem, setEditingItem] = useState(null);
   const [showAddItem, setShowAddItem] = useState(false);
 
+  // Fetch menu items and categories on mount
+  useEffect(() => {
+    fetchMenuData();
+  }, []);
+
+  const fetchMenuData = async () => {
+    try {
+      setLoading(true);
+      const [itemsResponse, categoriesResponse] = await Promise.all([
+        myMenuService.getMenuItems(),
+        myMenuService.getCategories()
+      ]);
+
+      if (itemsResponse.success && itemsResponse.data) {
+        setMenuItems(itemsResponse.data);
+      }
+
+      if (categoriesResponse.success && categoriesResponse.data) {
+        setCategories(categoriesResponse.data);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching menu data:', error);
+      toast.error('Failed to load menu data');
+      setLoading(false);
+    }
+  };
+
   // Filter menu items based on search term and selected category
   const filteredItems = menuItems.filter((item) => {
-    const matchesSearchTerm = item.name
+    const matchesSearchTerm = item.item_name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
     const matchesCategory =
-      selectedCategory === "All" || item.category === selectedCategory;
+      selectedCategory === "All" || 
+      item.hospitality_venue_menu_category?.name === selectedCategory;
     return matchesSearchTerm && matchesCategory;
   });
 
@@ -285,26 +83,77 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
   };
 
   // Function to handle saving changes from EditItem
-  const handleSaveItem = (updatedItem) => {
-    setMenuItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === updatedItem.id ? { ...item, ...updatedItem } : item
-      )
-    );
-    setEditingItem(null); // Close the EditItem component
+  const handleSaveItem = async (updatedItem) => {
+    try {
+      const response = await myMenuService.updateMenuItem(
+        editingItem.id,
+        {
+          name: updatedItem.name,
+          description: updatedItem.description,
+          categoryId: updatedItem.categoryId,
+          price: updatedItem.price,
+          discountPercentage: updatedItem.discountPercentage,
+          availability: updatedItem.available ? 'available' : 'unavailable',
+          image: updatedItem.image
+        }
+      );
+
+      if (response.success) {
+        toast.success('Menu item updated successfully!');
+        setEditingItem(null);
+        fetchMenuData(); // Refresh the list
+      }
+    } catch (error) {
+      console.error('Error updating menu item:', error);
+      toast.error('Failed to update menu item');
+    }
   };
 
   // Function to handle going back from EditItem without saving
   const handleBackFromEditItem = () => {
-    setEditingItem(null); // Close the EditItem component
+    setEditingItem(null);
   };
 
   // Function to handle adding a new item from AddItem
-  const handleAddItem = (newItem) => {
-    setMenuItems((prevItems) => [
-      { ...newItem, available: true, id: prevItems.length + 1 }, // Assign a new ID
-      ...prevItems,
-    ]);
+  const handleAddItem = async (newItem) => {
+    try {
+      const response = await myMenuService.createMenuItem({
+        name: newItem.name,
+        description: newItem.description,
+        categoryId: newItem.categoryId,
+        price: newItem.price,
+        discountPercentage: newItem.discountPercentage || '0',
+        calories: newItem.calories || '0',
+        servingSize: newItem.servingSize || '1',
+        availability: 'available',
+        image: newItem.image
+      });
+
+      if (response.success) {
+        toast.success('Menu item added successfully!');
+        setShowAddItem(false);
+        fetchMenuData(); // Refresh the list
+      }
+    } catch (error) {
+      console.error('Error adding menu item:', error);
+      toast.error('Failed to add menu item');
+    }
+  };
+
+  // Function to handle deleting an item
+  const handleDeleteItem = async (itemId) => {
+    if (!confirm('Are you sure you want to delete this item?')) {
+      return;
+    }
+
+    try {
+      await myMenuService.deleteMenuItem(itemId);
+      toast.success('Menu item deleted successfully!');
+      fetchMenuData(); // Refresh the list
+    } catch (error) {
+      console.error('Error deleting menu item:', error);
+      toast.error('Failed to delete menu item');
+    }
   };
 
   // Function to clear all filters
@@ -317,7 +166,7 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
   // Function to render pagination numbers with ellipses
   const renderPagination = () => {
     const pageNumbers = [];
-    const maxPageNumbersToShow = 5; // Adjust as needed
+    const maxPageNumbersToShow = 5;
 
     if (totalPages <= maxPageNumbersToShow) {
       for (let i = 1; i <= totalPages; i++) {
@@ -381,18 +230,44 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
     ));
   };
 
+  const downloadQRCode = async () => {
+    try {
+      await qrService.downloadQRCode();
+      toast.success('QR Code downloaded successfully!');
+    } catch (error) {
+      console.error('Error downloading QR code:', error);
+      toast.error('Failed to download QR code');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#343434] text-white p-8 font-sans rounded-lg flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00C1C9] mx-auto"></div>
+          <p className="mt-4 text-gray-400">Loading menu...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
+      <Toaster position="top-right" />
       {showAddItem ? (
-        <AddItem
+          <AddItem
           onBackClick={() => setShowAddItem(false)}
           onAddItem={handleAddItem}
+          categories={categories}
+          onCategoryAdded={() => fetchMenuData()} // Add this
         />
       ) : editingItem ? (
         <EditItem
           item={editingItem}
           onSave={handleSaveItem}
           onBackClick={handleBackFromEditItem}
+          onDelete={handleDeleteItem}
+          categories={categories}
         />
       ) : (
         <div className="min-h-screen bg-[#343434] text-white p-8 font-sans rounded-lg">
@@ -400,13 +275,12 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
-           
                 <h1 className="text-2xl font-semibold">My Menu</h1>
               </div>
               <div className="flex items-center space-x-4">
                 <button
                   className="flex items-center bg-[#4A4A4A] rounded-full px-4 py-2 text-sm font-medium hover:bg-[#5A5A5A]"
-                  onClick={() => setShowAddItem(true)} // Show AddItem on click
+                  onClick={() => setShowAddItem(true)}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -424,19 +298,52 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
                   </svg>
                   Add Item
                 </button>
+                <button
+                  className="flex items-center bg-[#4A4A4A] rounded-full px-4 py-2 text-sm font-medium hover:bg-[#5A5A5A] transition-colors duration-200 active:bg-[#3A3A3A]"
+                  onClick={downloadQRCode}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2"
+                  >
+                    <rect width="5" height="5" x="3" y="3" rx="1" />
+                    <rect width="5" height="5" x="16" y="3" rx="1" />
+                    <rect width="5" height="5" x="3" y="16" rx="1" />
+                    <path d="M21 16h-3a2 2 0 0 0-2 2v3" />
+                    <path d="M21 21v.01" />
+                    <path d="M12 7v3a2 2 0 0 1-2 2H7" />
+                    <path d="M3 12h.01" />
+                    <path d="M12 3h.01" />
+                    <path d="M12 16v.01" />
+                    <path d="M16 12h1" />
+                    <path d="M21 12v.01" />
+                    <path d="M12 21v-1" />
+                  </svg>
+                  Download QR Code
+                </button>
                 <div className="relative">
                   <select
                     className="bg-[#4A4A4A] rounded-full px-4 py-2 text-sm font-medium appearance-none pr-8 cursor-pointer"
                     value={selectedCategory}
                     onChange={(e) => {
                       setSelectedCategory(e.target.value);
-                      setCurrentPage(1); // Reset to first page on category change
+                      setCurrentPage(1);
                     }}
                   >
                     <option>All</option>
-                    <option>Starter</option>
-                    <option>Main Course</option>
-                    <option>Dessert</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.name}>
+                        {cat.name}
+                      </option>
+                    ))}
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
                     <svg
@@ -449,7 +356,6 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
                   </div>
                 </div>
 
-                {/* Search Input and Button Group */}
                 <div className="flex items-center">
                   <div className="relative">
                     <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -460,14 +366,12 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
                       value={searchTerm}
                       onChange={(e) => {
                         setSearchTerm(e.target.value);
-                        setCurrentPage(1); // Reset to first page on search
+                        setCurrentPage(1);
                       }}
                     />
                   </div>
 
                   <button className="hover:bg-gray-700 transition-colors bg-[#2A2A2A] p-[5px] rounded-tr-[7.04px] rounded-br-[7.04px]">
-                    {" "}
-                    {/* Added rounded corners */}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -491,7 +395,6 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
                     </svg>
                   </button>
                 </div>
-                {/* Clear Filters Button */}
                 {(searchTerm !== "" || selectedCategory !== "All") && (
                   <button
                     onClick={handleClearFilters}
@@ -512,31 +415,33 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
                 >
                   <div className="relative h-32 w-full">
                     <img
-                      src={item.image}
-                      alt={item.name}
+                      src={item.image || "/placeholder-food.jpg"}
+                      alt={item.item_name}
                       className="w-full h-full object-cover rounded-t-lg"
                     />
                     <div className="absolute top-2 right-2 bg-[#1A1A1A] text-white text-xs px-2 py-1 rounded-full opacity-80">
-                      {item.category}
+                      {item.hospitality_venue_menu_category?.name || 'N/A'}
                     </div>
                   </div>
                   <div className="p-4">
-                    <h3 className="text-lg font-semibold mb-1">{item.name}</h3>
+                    <h3 className="text-lg font-semibold mb-1">{item.item_name}</h3>
                     <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
-                      <span className="text-[#FB6000]">{item.category}</span>
+                      <span className="text-[#FB6000]">
+                        {item.hospitality_venue_menu_category?.name || 'N/A'}
+                      </span>
                       <span
                         className={`px-2 py-0.5 rounded-full text-xs ${
-                          item.available
+                          item.availability === 'available'
                             ? "bg-green-600 text-white"
                             : "bg-red-600 text-white"
                         }`}
                       >
-                        {item.available ? "Available" : "Unavailable"}
+                        {item.availability === 'available' ? "Available" : "Unavailable"}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-lg font-bold text-[#00C1C9]">
-                        {item.price}
+                        ${item.price}
                       </span>
                       <button
                         className="p-1 rounded-full border border-[#C267FF] cursor-pointer"

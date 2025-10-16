@@ -1,6 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: "https://twist-steps-ideal-antonio.trycloudflare.com",
+  BASE_URL: "https://job-remark-departmental-civic.trycloudflare.com",
   ENDPOINTS: {
     // Authentication
     LOGIN: "/api/hospitality/login/",
@@ -60,8 +60,8 @@ export const API_CONFIG = {
     PROFILE_UPDATE: "/api/hospitality/profile-management/update/",
     
     // Operating Hours
-    OPERATING_HOURS_CREATE: "/api/hospitality/operating-hours/create/",
     OPERATING_HOURS_GET: (venueId) => `/api/hospitality/venues/${venueId}/operating-hours/`,
+    OPERATING_HOURS_CREATE: "/api/hospitality/operating-hours/create/",
     OPERATING_HOURS_UPDATE: (hoursId) => `/api/hospitality/operating-hours/${hoursId}/update/`,
     
     // Weekly Data
@@ -81,6 +81,34 @@ export const API_CONFIG = {
     REVIEWS_DASHBOARD_GET: (venueId) => `/api/hospitality/venues/${venueId}/dashboard/reviews/`,
     REVIEWS_REPLY: (venueId, reviewId) => `/api/hospitality/venues/${venueId}/reviews/${reviewId}/reply/`,
     REVIEWS_DELETE: (venueId, reviewId) => `/api/hospitality/venues/${venueId}/reviews/${reviewId}/delete/`,
+    // QR Code
+    VENUE_QR_CODE: "/api/hospitality/venue-profile/qr-code/",
+
+    // Menu Categories
+    MENU_CATEGORIES_GET: (venueId) => `/api/hospitality/venues/${venueId}/menu-categories/`,
+    MENU_CATEGORIES_CREATE: "/api/hospitality/menu-categories/create/",
+    MENU_CATEGORIES_UPDATE: (categoryId) => `/api/hospitality/menu-categories/${categoryId}/update/`,
+    MENU_CATEGORIES_DELETE: (categoryId) => `/api/hospitality/menu-categories/${categoryId}/delete/`,
+
+
+    // Add these to API_CONFIG.ENDPOINTS in your config.js:
+
+// Night Life Bookings
+// Add to API_CONFIG.ENDPOINTS:
+
+// Night Life Bookings - Uses venueId dynamically
+NIGHTLIFE_BOOKINGS_GET: (venueId) => `/api/hospitality/my-nightlife-bookings/`,
+NIGHTLIFE_BOOKINGS_GET_DETAIL: (bookingId) => `/api/hospitality/nightlife-bookings/${bookingId}/`,
+NIGHTLIFE_BOOKINGS_CONFIRM: (bookingId) => `/api/hospitality/nightlife-bookings/${bookingId}/accept/`,
+NIGHTLIFE_BOOKINGS_CANCEL: (bookingId) => `/api/hospitality/nightlife-bookings/${bookingId}/cancel/`,
+NIGHTLIFE_BOOKINGS_MARK_PAID: (bookingId) => `/api/hospitality/nightlife-bookings/${bookingId}/mark-paid/`,
+    
+    // Menu Items
+    MENU_ITEMS_GET: (venueId) => `/api/hospitality/venues/${venueId}/menu-items/`,
+    MENU_ITEMS_CREATE: "/api/hospitality/menu-items/create/",
+    MENU_ITEMS_UPDATE: (itemId) => `/api/hospitality/menu-items/${itemId}/update/`,
+    MENU_ITEMS_DELETE: (itemId) => `/api/hospitality/menu-items/${itemId}/delete/`,
+
   }
 };
 

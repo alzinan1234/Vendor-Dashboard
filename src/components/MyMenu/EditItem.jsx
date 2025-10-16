@@ -1,19 +1,21 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'; // Import for the search icon
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 // EditItem Component
-const EditItem = ({ item, onSave, onBackClick }) => {
+const EditItem = ({ item, onSave, onBackClick, onDelete, categories }) => {
   const [formData, setFormData] = useState({
-    name: item.name,
-    description: "Crispy tortilla chips topped with melted cheddar cheese, jalapeños, and a dash of seasoning—perfect for sharing or as a flavorful snack. Served with salsa and sour cream on the side.", // Static description as per image
-    category: item.category,
-    price: item.price,
-    discountPercentage: '9%', // Static discount as per image
-    image: item.image,
+    name: item.item_name || '',
+    description: item.item_details || '',
+    categoryId: item.hospitality_venue_menu_category?.id || '',
+    price: item.price || '',
+    discountPercentage: item.discount || '0',
+    image: item.image || null,
+    available: item.availability === 'available',
   });
 
+  const [imageFile, setImageFile] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleInputChange = (e) => {
@@ -31,17 +33,20 @@ const EditItem = ({ item, onSave, onBackClick }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
+      setImageFile(file);
       setFormData((prevData) => ({
         ...prevData,
-        image: imageUrl,
+        image: file,
       }));
-      console.log('File selected:', file.name);
     }
   };
 
   const handleDone = () => {
-    onSave(formData); // Pass the updated data back to the parent
+    onSave(formData);
+  };
+
+  const handleDelete = () => {
+    onDelete(item.id);
   };
 
   return (
@@ -61,7 +66,10 @@ const EditItem = ({ item, onSave, onBackClick }) => {
             </svg>
           </button>
           <h1 className="text-2xl font-semibold">Edit Item</h1>
-          <button className="ml-auto p-2 rounded-full hover:bg-red-700">
+          <button 
+            className="ml-auto p-2 rounded-full hover:bg-red-700"
+            onClick={handleDelete}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 text-red-500"
@@ -89,7 +97,11 @@ const EditItem = ({ item, onSave, onBackClick }) => {
               onClick={handleImageUploadClick}
             >
               {formData.image ? (
-                <img src={formData.image} alt="Item Preview" className="w-full h-full object-cover rounded-lg" />
+                <img 
+                  src={typeof formData.image === 'string' ? formData.image : URL.createObjectURL(formData.image)} 
+                  alt="Item Preview" 
+                  className="w-full h-full object-cover rounded-lg" 
+                />
               ) : (
                 <div className="flex flex-col items-center justify-center">
                   <svg
@@ -134,37 +146,40 @@ const EditItem = ({ item, onSave, onBackClick }) => {
             />
           </div>
 
-          {/* Item Details (Description) */}
+          {/* Description */}
           <div>
             <label htmlFor="description" className="block text-gray-300 text-sm font-medium mb-2">
-              Item Details
+              Description 
             </label>
             <textarea
               id="description"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              rows="4"
               className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-[#CACACA] focus:outline-none focus:border-blue-500 text-white"
+              rows="3"
             ></textarea>
           </div>
 
           {/* Category */}
           <div>
-            <label htmlFor="category" className="block text-gray-300 text-sm font-medium mb-2">
+            <label htmlFor="categoryId" className="block text-gray-300 text-sm font-medium mb-2">
               Category
             </label>
             <div className="relative">
               <select
-                id="category"
-                name="category"
-                value={formData.category}
+                id="categoryId"
+                name="categoryId"
+                value={formData.categoryId}
                 onChange={handleInputChange}
                 className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-[#CACACA] focus:outline-none focus:border-blue-500 text-white appearance-none pr-8"
               >
-                <option>Starter</option>
-                <option>Main Course</option>
-                <option>Dessert</option>
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
                 <svg
@@ -184,7 +199,9 @@ const EditItem = ({ item, onSave, onBackClick }) => {
               Item Price
             </label>
             <input
-              type="text"
+              type="number"
+              step="0.01"
+              min="0"
               id="price"
               name="price"
               value={formData.price}
@@ -199,13 +216,28 @@ const EditItem = ({ item, onSave, onBackClick }) => {
               Discount Percentage
             </label>
             <input
-              type="text"
+              type="number"
+              min="0"
+              max="100"
               id="discountPercentage"
               name="discountPercentage"
               value={formData.discountPercentage}
               onChange={handleInputChange}
               className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-[#CACACA] focus:outline-none focus:border-blue-500 text-white"
             />
+          </div>
+
+          {/* Availability Toggle */}
+          <div>
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                checked={formData.available}
+                onChange={(e) => setFormData({ ...formData, available: e.target.checked })}
+                className="w-5 h-5 text-[#00C1C9] bg-gray-700 border-gray-600 rounded focus:ring-[#00C1C9]"
+              />
+              <span className="text-gray-300 text-sm font-medium">Available for Order</span>
+            </label>
           </div>
 
           {/* Done Button */}

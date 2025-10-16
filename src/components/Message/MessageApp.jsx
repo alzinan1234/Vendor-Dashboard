@@ -13,8 +13,8 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 // API Configuration
 const API_CONFIG = {
-  BASE_URL: "https://twist-steps-ideal-antonio.trycloudflare.com",
-  WS_URL: "wss://twist-steps-ideal-antonio.trycloudflare.com",
+  BASE_URL: "https://job-remark-departmental-civic.trycloudflare.com",
+  WS_URL: "wss://job-remark-departmental-civic.trycloudflare.com",
   ENDPOINTS: {
     VENDORS_LIST: "/api/vendorchat/vendors/",
     CONVERSATIONS: "/api/vendorchat/conversations/",

@@ -1,6 +1,9 @@
 "use client";
 
+import { myMenuService } from "@/lib/myMenueService";
 import React, { useState, useRef } from "react";
+
+import toast from 'react-hot-toast';
 
 const AddCategory = ({ onBackClick, onAddCategory }) => {
   const [formData, setFormData] = useState({
@@ -8,6 +11,7 @@ const AddCategory = ({ onBackClick, onAddCategory }) => {
     image: null,
   });
 
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleInputChange = (e) => {
@@ -24,29 +28,83 @@ const AddCategory = ({ onBackClick, onAddCategory }) => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
+    if (!file) return;
+
+    try {
+      // Validate file size (5MB max)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        toast.error('File size too large. Maximum size is 5MB.');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        toast.error('Invalid file type. Please upload a JPEG, PNG, or WebP image.');
+        return;
+      }
+
       setFormData((prevData) => ({
         ...prevData,
-        image: imageUrl,
+        image: file,
       }));
-      console.log("File selected:", file.name);
+    } catch (error) {
+      console.error('File validation error:', error);
+      toast.error('Error processing image. Please try again.');
     }
   };
 
-  const handleDone = () => {
-    if (!formData.name || !formData.image) {
-      alert("Please fill in all required fields and upload an image.");
+  const handleDone = async () => {
+    // Form validation
+    if (!formData.name.trim()) {
+      toast.error("Please enter a category name.");
       return;
     }
-    const newCategory = { ...formData, id: Date.now() };
-    onAddCategory(newCategory);
-    onBackClick();
+
+    if (!formData.image) {
+      toast.error("Please upload a category image.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // Validate image again before submission
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      
+      if (formData.image.size > maxSize) {
+        throw new Error('File size too large. Maximum size is 5MB.');
+      }
+
+      if (!allowedTypes.includes(formData.image.type)) {
+        throw new Error('Invalid file type. Please upload a JPEG, PNG, or WebP image.');
+      }
+
+      const response = await myMenuService.createCategory({
+        name: formData.name.trim(),
+        image: formData.image
+      });
+
+      if (response.success) {
+        toast.success('Category created successfully!');
+        onAddCategory(response.data);
+        onBackClick();
+      } else {
+        throw new Error(response.message || 'Failed to create category');
+      }
+    } catch (error) {
+      console.error('Error creating category:', error);
+      toast.error(error.message || 'Failed to create category. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className=" bg-[#343434] text-white p-8 font-sans rounded-lg flex flex-col items-center">
-      <div className=" w-6xl bg-[#343434] rounded-lg">
+    <div className="bg-[#343434] text-white p-8 font-sans rounded-lg flex flex-col items-center">
+      <div className="w-6xl bg-[#343434] rounded-lg">
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={onBackClick}
@@ -95,7 +153,7 @@ const AddCategory = ({ onBackClick, onAddCategory }) => {
             >
               {formData.image ? (
                 <img
-                  src={formData.image}
+                  src={URL.createObjectURL(formData.image)}
                   alt="Category Preview"
                   className="w-full h-full object-cover rounded-lg"
                 />
@@ -131,10 +189,13 @@ const AddCategory = ({ onBackClick, onAddCategory }) => {
           <div className="col-span-full mt-4">
             <button
               onClick={handleDone}
+              disabled={loading}
               type="submit"
-              className="w-full mx-auto flex justify-center items-center rounded-full bg-[#00C1C9] text-white py-2 font-medium border-b-4 border-lime-400"
+              className={`w-full mx-auto flex justify-center items-center rounded-full bg-[#00C1C9] text-white py-2 font-medium border-b-4 border-lime-400 ${
+                loading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
-              Save
+              {loading ? 'Saving...' : 'Save'}
             </button>
           </div>
         </div>

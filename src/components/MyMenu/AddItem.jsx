@@ -1,17 +1,19 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import AddCategory from "./AddCategory";
-import toast, { Toaster } from 'react-hot-toast'; // Import toast and Toaster
+import toast, { Toaster } from 'react-hot-toast';
 
-const AddItem = ({ onBackClick, onAddItem }) => {
+const AddItem = ({ onBackClick, onAddItem, categories }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    category: "Starter",
+    categoryId: "",
     price: "",
     discountPercentage: "",
+    calories: "",
+    servingSize: "",
     image: null,
   });
 
@@ -33,12 +35,10 @@ const AddItem = ({ onBackClick, onAddItem }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
       setFormData((prevData) => ({
         ...prevData,
-        image: imageUrl,
+        image: file, // Store the actual file for upload
       }));
-      console.log("File selected:", file.name);
     }
   };
 
@@ -47,36 +47,28 @@ const AddItem = ({ onBackClick, onAddItem }) => {
       !formData.name ||
       !formData.description ||
       !formData.price ||
+      !formData.categoryId ||
       !formData.image
     ) {
-      toast.error("Please fill in all required fields and upload an image."); // Use toast.error
+      toast.error("Please fill in all required fields and upload an image.");
       return;
     }
-    const newItem = { ...formData, id: Date.now() };
-    onAddItem(newItem);
-    toast.success("Item added successfully!"); // Show success toast
-
-    // Add a small delay before navigating back to allow the toast to be seen
-    setTimeout(() => {
-      onBackClick();
-    }, 1000); // 1000ms (1 second) delay
+    
+    onAddItem(formData);
   };
 
   const handleAddCategoryClick = () => {
     setIsAddCategoryOpen(true);
   };
 
-  const handleCategoryAdded = (newCategory) => {
-    setIsAddCategoryOpen(false);
-    // Update the category dropdown options here if needed
-    setFormData((prevData) => ({
-      ...prevData,
-      category: newCategory.name, // Optionally set the new category as default
-    }));
-  };
-
+const handleCategoryAdded = (newCategory) => {
+  setIsAddCategoryOpen(false);
+  props.onCategoryAdded(); // Call parent refetch
+  toast.success('Category added successfully!');
+};
   return (
     <div className="min-h-screen bg-[#343434] text-white p-8 font-sans rounded-lg flex flex-col items-center relative">
+      <Toaster position="top-right" />
       <div className="w-full max-w-2xl bg-[#343434] rounded-lg">
         <div className="flex items-center justify-between mb-6">
           <button
@@ -132,7 +124,7 @@ const AddItem = ({ onBackClick, onAddItem }) => {
             >
               {formData.image ? (
                 <img
-                  src={formData.image}
+                  src={URL.createObjectURL(formData.image)}
                   alt="Item Preview"
                   className="w-full h-full object-cover rounded-lg"
                 />
@@ -201,22 +193,25 @@ const AddItem = ({ onBackClick, onAddItem }) => {
 
           <div>
             <label
-              htmlFor="category"
+              htmlFor="categoryId"
               className="block text-gray-300 text-sm font-medium mb-2"
             >
               Category
             </label>
             <div className="relative">
               <select
-                id="category"
-                name="category"
-                value={formData.category}
+                id="categoryId"
+                name="categoryId"
+                value={formData.categoryId}
                 onChange={handleInputChange}
                 className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-[#CACACA] focus:outline-none focus:border-blue-500 text-white appearance-none pr-8"
               >
-                <option>Starter</option>
-                <option>Main Course</option>
-                <option>Dessert</option>
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
                 <svg
@@ -264,6 +259,40 @@ const AddItem = ({ onBackClick, onAddItem }) => {
             />
           </div>
 
+          <div>
+            <label
+              htmlFor="calories"
+              className="block text-gray-300 text-sm font-medium mb-2"
+            >
+              Calories (Optional)
+            </label>
+            <input
+              type="text"
+              id="calories"
+              name="calories"
+              value={formData.calories}
+              onChange={handleInputChange}
+              className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-[#CACACA] focus:outline-none focus:border-blue-500 text-white"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="servingSize"
+              className="block text-gray-300 text-sm font-medium mb-2"
+            >
+              Serving Size (Optional)
+            </label>
+            <input
+              type="text"
+              id="servingSize"
+              name="servingSize"
+              value={formData.servingSize}
+              onChange={handleInputChange}
+              className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-[#CACACA] focus:outline-none focus:border-blue-500 text-white"
+            />
+          </div>
+
           <div className="col-span-full mt-4">
             <button
               onClick={handleDone}
@@ -284,7 +313,6 @@ const AddItem = ({ onBackClick, onAddItem }) => {
           />
         </div>
       )}
-      <Toaster /> {/* Add Toaster component here */}
     </div>
   );
 };
