@@ -1,6 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: "https://job-remark-departmental-civic.trycloudflare.com",
+  BASE_URL: "https://rugby-affecting-kit-youth.trycloudflare.com",
   ENDPOINTS: {
     // Authentication
     LOGIN: "/api/hospitality/login/",

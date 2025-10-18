@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { operatingHoursService, profileService } from '@/lib/ProfileManagementService';
+import { profileService } from '@/lib/ProfileManagementService';
 import toast from 'react-hot-toast';
 
 const EditProfileManagement = ({ onBackClick, onSuccess, initialData, venueData }) => {
@@ -11,13 +11,19 @@ const EditProfileManagement = ({ onBackClick, onSuccess, initialData, venueData 
     address: '',
     phoneNumber: '',
     email: '',
-    operatingHours: [],
+    operatingHours: [
+      { day: 'Monday', openTime: '', closeTime: '', isOpen: true },
+      { day: 'Tuesday', openTime: '', closeTime: '', isOpen: true },
+      { day: 'Wednesday', openTime: '', closeTime: '', isOpen: true },
+      { day: 'Thursday', openTime: '', closeTime: '', isOpen: true },
+      { day: 'Friday', openTime: '', closeTime: '', isOpen: true },
+      { day: 'Saturday', openTime: '', closeTime: '', isOpen: true },
+      { day: 'Sunday', openTime: '', closeTime: '', isOpen: true },
+    ],
   });
 
   const [uploadedImages, setUploadedImages] = useState(Array(4).fill(null));
   const [imageFiles, setImageFiles] = useState(Array(4).fill(null));
-  const [weeklyData, setWeeklyData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const fileInputRefs = useRef([]);
@@ -25,67 +31,43 @@ const EditProfileManagement = ({ onBackClick, onSuccess, initialData, venueData 
 
   useEffect(() => {
     initializeFormData();
-    fetchWeeklyData();
   }, [initialData, venueData]);
 
   const initializeFormData = () => {
     if (initialData) {
+      // Extract operating hours from API response
+      const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+      const operatingHours = days.map((day, index) => ({
+        day: day.charAt(0).toUpperCase() + day.slice(1),
+        openTime: initialData[`${day}_open`] ? initialData[`${day}_open`].substring(0, 5) : '',
+        closeTime: initialData[`${day}_close`] ? initialData[`${day}_close`].substring(0, 5) : '',
+        isOpen: initialData[`${day}_is_open`] || false,
+      }));
+
       setFormData({
         restaurantName: initialData.name || '',
         description: initialData.description || '',
         address: initialData.address || '',
         phoneNumber: initialData.phone_number || '',
         email: initialData.email || '',
-        operatingHours: formData.operatingHours, // Will be set by fetchWeeklyData
+        operatingHours: operatingHours,
       });
+      
       loadExistingImages();
     } else if (venueData) {
       // Pre-fill with venue data if no profile exists
-      setFormData({
+      setFormData(prev => ({
+        ...prev,
         restaurantName: venueData.venue_name || '',
-        description: '',
         address: venueData.location || '',
         phoneNumber: venueData.mobile_number || '',
         email: venueData.user?.email || '',
-        operatingHours: formData.operatingHours,
-      });
-    }
-  };
-
-  const fetchWeeklyData = async () => {
-    setLoading(true);
-    const result = await operatingHoursService.getWeeklyData();
-    
-    if (result.success) {
-      const days = result.data;
-      
-      // Initialize operating hours with weekly data
-      const initialOperatingHours = days.map(day => {
-        // Find existing operating hours for this day if available
-        const existingHours = initialData?.operating_hours_detail?.weekly?.name === day.name.toLowerCase()
-          ? initialData.operating_hours_detail
-          : null;
-
-        return {
-          weeklyId: day.id,
-          day: day.name.charAt(0).toUpperCase() + day.name.slice(1),
-          openTime: existingHours?.open_time?.substring(0, 5) || '',
-          closeTime: existingHours?.close_time?.substring(0, 5) || '',
-          isOpen: existingHours?.is_open !== undefined ? existingHours.is_open : true,
-        };
-      });
-
-      setFormData(prev => ({
-        ...prev,
-        operatingHours: initialOperatingHours,
       }));
       
-      setWeeklyData(days);
-    } else {
-      toast.error(result.error || 'Failed to load weekly data');
+      if (venueData.profile_picture) {
+        setUploadedImages([venueData.profile_picture, null, null, null]);
+      }
     }
-    
-    setLoading(false);
   };
 
   const loadExistingImages = () => {
@@ -104,9 +86,6 @@ const EditProfileManagement = ({ onBackClick, onSuccess, initialData, venueData 
         return null;
       });
       setUploadedImages(existingImages);
-    } else if (venueData?.profile_picture) {
-      // If no profile images but venue has profile picture, show it as first image
-      setUploadedImages([venueData.profile_picture, null, null, null]);
     }
   };
 
@@ -223,55 +202,25 @@ const EditProfileManagement = ({ onBackClick, onSuccess, initialData, venueData 
     const loadingToast = toast.loading(initialData ? 'Updating profile...' : 'Creating profile...');
 
     try {
-      // Step 1: Create/update operating hours if any are set
-      let operatingHoursId = null;
-      const hoursToCreate = formData.operatingHours.filter(
-        hour => hour.isOpen && (hour.openTime || hour.closeTime)
-      );
-
-      if (hoursToCreate.length > 0) {
-        const hoursResult = await operatingHoursService.createOperatingHours(
-          venueData?.id,
-          hoursToCreate
-        );
-
-        if (hoursResult.success && hoursResult.data.length > 0) {
-          // Use the first created operating hours ID
-          const successfulHours = hoursResult.data.find(h => h.success);
-          if (successfulHours?.data?.id) {
-            operatingHoursId = successfulHours.data.id;
-          }
-        } else {
-          console.warn('Some operating hours failed to create:', hoursResult);
-        }
-      }
-
-      // Step 2: Prepare profile data
+      // Prepare profile data with operating hours
       const profileData = {
         name: formData.restaurantName,
         description: formData.description,
         address: formData.address,
         phoneNumber: formData.phoneNumber,
         email: formData.email,
+        operatingHours: formData.operatingHours,
       };
 
       // Get only new image files (not existing URLs)
       const newImages = imageFiles.filter(file => file !== null);
 
-      // Step 3: Create or update profile
+      // Create or update profile
       let result;
       if (initialData) {
-        result = await profileService.updateProfile(
-          profileData,
-          newImages,
-          operatingHoursId
-        );
+        result = await profileService.updateProfile(profileData, newImages);
       } else {
-        result = await profileService.createProfile(
-          profileData,
-          newImages,
-          operatingHoursId
-        );
+        result = await profileService.createProfile(profileData, newImages);
       }
 
       toast.dismiss(loadingToast);
@@ -302,17 +251,6 @@ const EditProfileManagement = ({ onBackClick, onSuccess, initialData, venueData 
       setSubmitting(false);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#343434] text-white p-8 flex items-center justify-center rounded-lg">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00C1C9] mx-auto mb-4"></div>
-          <p className="text-gray-300">Loading form data...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[#343434] text-white p-8 font-sans rounded-lg flex flex-col items-center">
