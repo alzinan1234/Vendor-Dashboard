@@ -253,7 +253,7 @@ const MyMenu = ({ onBackClick, onAddClick }) => {
 
   return (
     <>
-      <Toaster position="top-right" />
+      {/* <Toaster position="top-right" /> */}
       {showAddItem ? (
           <AddItem
           onBackClick={() => setShowAddItem(false)}

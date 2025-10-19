@@ -11,10 +11,10 @@ import {
 } from "lucide-react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
-// API Configuration
+// API Configurationhttps://luke-stat-forming-kinase.trycloudflare.com/
 const API_CONFIG = {
-  BASE_URL: "https://rugby-affecting-kit-youth.trycloudflare.com",
-  WS_URL: "wss://rugby-affecting-kit-youth.trycloudflare.com",
+  BASE_URL: "https://luke-stat-forming-kinase.trycloudflare.com",
+  WS_URL: "wss://luke-stat-forming-kinase.trycloudflare.com",
   ENDPOINTS: {
     VENDORS_LIST: "/api/vendorchat/vendors/",
     CONVERSATIONS: "/api/vendorchat/conversations/",

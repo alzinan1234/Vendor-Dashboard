@@ -14,6 +14,21 @@ const nextConfig = {
       "things-programming-discovered-actually.trycloudflare.com"
       , "rugby-affecting-kit-youth.trycloudflare.com"
     ],
+    // Allow any subdomain of trycloudflare.com (covers many dynamic preview hosts)
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: '**.trycloudflare.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.trycloudflare.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
