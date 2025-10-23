@@ -350,7 +350,7 @@ export default function EventRegistrationManagement() {
                             </>
                           ) : reg.status === 'Confirmed' ? (
                             <>
-                              <button
+                              {/* <button
                                 onClick={() => handleView(reg)}
                                 className="text-purple-400 hover:text-purple-300 border border-purple-400 p-2 rounded-full hover:bg-purple-900 hover:bg-opacity-30 transition-all"
                                 title="View Details"
@@ -369,8 +369,8 @@ export default function EventRegistrationManagement() {
                                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                   <circle cx="12" cy="12" r="3"></circle>
                                 </svg>
-                              </button>
-                              {reg.paymentStatus === 'Unpaid' && (
+                              </button> */}
+                              {/* {reg.paymentStatus === 'Unpaid' && (
                                 <button
                                   onClick={() => handleMarkPaid(reg.id)}
                                   className="text-[#00C1C9] hover:text-cyan-300 border border-[#00C1C9] p-2 rounded-full hover:bg-cyan-900 hover:bg-opacity-30 transition-all"
@@ -391,7 +391,7 @@ export default function EventRegistrationManagement() {
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                   </svg>
                                 </button>
-                              )}
+                              )} */}
                               <button
                                 onClick={() => handleReject(reg.id)}
                                 className="text-red-400 hover:text-red-300 border border-red-400 p-2 rounded-full hover:bg-red-900 hover:bg-opacity-30 transition-all"
