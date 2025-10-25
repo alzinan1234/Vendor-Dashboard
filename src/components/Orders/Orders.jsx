@@ -232,18 +232,6 @@ const Orders = () => {
                           </svg>
                         </button>
                         
-                        {/* View Details Button */}
-                        <button 
-                          onClick={() => handleViewDetails(order.orderId)} 
-                          className="text-purple-400 border border-[#C267FF] hover:text-purple-600 rounded-[51px] p-[5px] transition-colors"
-                          title="View Details"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 11" fill="none">
-                            <path d="M14.3628 4.63424C14.5655 4.91845 14.6668 5.06056 14.6668 5.27091C14.6668 5.48127 14.5655 5.62338 14.3628 5.90759C13.4521 7.18462 11.1263 9.93758 8.00016 9.93758C4.87402 9.93758 2.54823 7.18462 1.63752 5.90759C1.43484 5.62338 1.3335 5.48127 1.3335 5.27091C1.3335 5.06056 1.43484 4.91845 1.63752 4.63424C2.54823 3.35721 4.87402 0.604248 8.00016 0.604248C11.1263 0.604248 13.4521 3.35721 14.3628 4.63424Z" stroke="#C267FF" />
-                            <path d="M10 5.271C10 4.16643 9.10457 3.271 8 3.271C6.89543 3.271 6 4.16643 6 5.271C6 6.37557 6.89543 7.271 8 7.271C9.10457 7.271 10 6.37557 10 5.271Z" stroke="#C267FF" />
-                          </svg>
-                        </button>
-                        
                         {/* Cancel Button */}
                         <button 
                           onClick={() => handleCancelItem(order.items?.[0]?.id)}

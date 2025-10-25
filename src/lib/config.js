@@ -1,7 +1,7 @@
 // config.js - Complete API Configuration
 
 export const API_CONFIG = {
-  BASE_URL: "https://heaven-produce-hanging-mainland.trycloudflare.com",
+  BASE_URL: "https://tamil-opt-healthy-will.trycloudflare.com",
   
   ENDPOINTS: {
     // ==================== AUTHENTICATION ====================
@@ -117,6 +117,11 @@ export const API_CONFIG = {
     MENU_CATEGORIES_CREATE: "/api/hospitality/menu-categories/create/",
     MENU_CATEGORIES_UPDATE: (categoryId) => `/api/hospitality/menu-categories/${categoryId}/update/`,
     MENU_CATEGORIES_DELETE: (categoryId) => `/api/hospitality/menu-categories/${categoryId}/delete/`,
+
+       // ==================== PROFILE MANAGEMENT ====================
+    PROFILE_GET: "/api/hospitality/profile-management/",
+    PROFILE_CREATE: "/api/hospitality/profile-management/create/",
+    PROFILE_UPDATE: "/api/hospitality/profile-management/update/",
     
     // ==================== MENU ITEMS ====================
     MENU_ITEMS_GET: (venueId) => `/api/hospitality/venues/${venueId}/menu-items/`,
